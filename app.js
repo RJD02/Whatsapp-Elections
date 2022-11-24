@@ -3,7 +3,7 @@ const express = require("express");
 const app = express();
 const axios = require("axios");
 
-app.use(express().json());
+app.use(express.json());
 
 const port = process.env.PORT || 3000;
 
@@ -58,6 +58,10 @@ app.post("/webhook", (req, res) => {
   } else {
     res.sendStatus(404);
   }
+});
+
+app.get("/", (req, res) => {
+  res.send("It's RJ");
 });
 
 app.listen(port, () => {
