@@ -26,38 +26,39 @@ app.get("/webhook", (req, res) => {
 
 app.post("/webhook", (req, res) => {
   const body = req.body;
-  console.log(JSON.stringify(body, null, 2));
-  if (req.body.object) {
-    if (
-      body.entry &&
-      body.entry[0].changes &&
-      body.entry[0].changes[0] &&
-      body.entry[0].changes[0].value.messages &&
-      body.entry[0].changes[0].value.messages[0]
-    ) {
-      let phone_number_id =
-        req.body.entry[0].changes[0].value.metadata.phone_number_id;
-      let from = req.body.entry[0].changes[0].value.messages[0].from;
-      let msg_body = req.body.entry[0].changes[0].value.messages[0].text.body;
-      axios({
-        method: "POST",
-        url:
-          "https://graph.facebook.com/v12.0/" +
-          phone_number_id +
-          "/messages?access_token=" +
-          process.env.WHATSAPP_TOKEN,
-        data: {
-          messaging_product: "whatsapp",
-          to: from,
-          text: { body: "Ack: " + msg_body },
-          headers: { "Content-Type": "application/json" },
-        },
-      });
-    }
-    res.sendStatus(200);
-  } else {
-    res.sendStatus(404);
-  }
+  console.log("Incoming webhook: ", +JSON.stringify(req.body));
+  res.sendStatus(200);
+  //   if (req.body.object) {
+  //     if (
+  //       body.entry &&
+  //       body.entry[0].changes &&
+  //       body.entry[0].changes[0] &&
+  //       body.entry[0].changes[0].value.messages &&
+  //       body.entry[0].changes[0].value.messages[0]
+  //     ) {
+  //       let phone_number_id =
+  //         req.body.entry[0].changes[0].value.metadata.phone_number_id;
+  //       let from = req.body.entry[0].changes[0].value.messages[0].from;
+  //       let msg_body = req.body.entry[0].changes[0].value.messages[0].text.body;
+  //       axios({
+  //         method: "POST",
+  //         url:
+  //           "https://graph.facebook.com/v12.0/" +
+  //           phone_number_id +
+  //           "/messages?access_token=" +
+  //           process.env.WHATSAPP_TOKEN,
+  //         data: {
+  //           messaging_product: "whatsapp",
+  //           to: from,
+  //           text: { body: "Ack: " + msg_body },
+  //           headers: { "Content-Type": "application/json" },
+  //         },
+  //       });
+  //     }
+  //     res.sendStatus(200);
+  //   } else {
+  //     res.sendStatus(404);
+  //   }
 });
 
 app.get("/", (req, res) => {
