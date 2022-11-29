@@ -4,7 +4,6 @@ const app = express();
 const axios = require("axios");
 const Voter = require("./models/voters");
 const mongoose = require("mongoose");
-const { addData, getData } = require("./addData");
 
 mongoose.connect(
   `mongodb+srv://admin-raviraj:${process.env.MONGO_DB_PASSWORD}@cluster0.lkxsz.mongodb.net/whatsappIntegration?retryWrites=true&w=majority`,
