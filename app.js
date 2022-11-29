@@ -2,7 +2,22 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const axios = require("axios");
+const Voter = require("./models/voters");
+const mongoose = require("mongoose");
+const { addData, getData } = require("./addData");
 
+mongoose.connect(
+  `mongodb+srv://admin-raviraj:${process.env.MONGO_DB_PASSWORD}@cluster0.lkxsz.mongodb.net/whatsappIntegration?retryWrites=true&w=majority`,
+  {
+    useUnifiedTopology: true,
+  }
+);
+
+const db = mongoose.connection;
+db.on("error", console.error.bind("Connection error!"));
+db.once("open", () => {
+  console.log("Database connected");
+});
 app.use(express.json());
 
 const port = process.env.PORT || 3000;
@@ -24,7 +39,7 @@ app.get("/webhook", (req, res) => {
   }
 });
 
-app.post("/webhook", (req, res) => {
+app.post("/webhook", async (req, res) => {
   const body = req.body;
   console.log(JSON.stringify(body, null, 2));
   if (req.body.object) {
@@ -39,6 +54,23 @@ app.post("/webhook", (req, res) => {
         req.body.entry[0].changes[0].value.metadata.phone_number_id;
       let from = req.body.entry[0].changes[0].value.messages[0].from;
       let msg_body = req.body.entry[0].changes[0].value.messages[0].text.body;
+      let voter = null;
+      try {
+        voter = await Voter.find({ cardno: msg_body });
+      } catch {
+        console.log("Voter not found");
+      }
+      if (voter) {
+        msg_body = `This is your details:
+        Ward_no: ${voter["Ward_no"]}
+        SLNO: ${voter["SLNO"]}
+        House No: ${voter["houseno"]}
+        Name: ${voter["VNAME_ENGLISH"]}
+        Age: ${voter["Age"]}
+        Card No.: ${voter["cardno"]}`;
+      } else {
+        msg_body = "Voter not found";
+      }
       axios({
         method: "POST",
         url:
@@ -49,7 +81,7 @@ app.post("/webhook", (req, res) => {
         data: {
           messaging_product: "whatsapp",
           to: from,
-          text: { body: "Ack: " + msg_body },
+          text: { body: "Ack: \n" + msg_body },
           headers: { "Content-Type": "application/json" },
         },
       });
