@@ -70,6 +70,7 @@ app.post("/webhook", async (req, res) => {
       } else {
         msg_body = "Voter not found";
       }
+      console.log("Message Body = ", msg_body);
       axios({
         method: "POST",
         url:
