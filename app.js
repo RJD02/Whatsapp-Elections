@@ -57,7 +57,8 @@ app.post("/webhook", async (req, res) => {
       console.log("This is the card number", msg_body);
       try {
         voter = await Voter.find({ cardno: msg_body });
-        console.log(voter);
+        console.log(voter[0]);
+        voter = voter[0];
         if (voter) {
           msg_body = `This is your details:
         Ward_no: ${voter.Ward_no}
