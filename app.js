@@ -58,12 +58,12 @@ app.post("/webhook", async (req, res) => {
         voter = await Voter.find({ cardno: msg_body });
         if (voter) {
           msg_body = `This is your details:
-        Ward_no: ${voter["Ward_no"]}
-        SLNO: ${voter["SLNO"]}
-        House No: ${voter["houseno"]}
-        Name: ${voter["VNAME_ENGLISH"]}
-        Age: ${voter["Age"]}
-        Card No.: ${voter["cardno"]}`;
+        Ward_no: ${voter.Ward_no}
+        SLNO: ${voter.SLNO}
+        House No: ${voter.houseno}
+        Name: ${voter.VNAME_ENGLISH}
+        Age: ${voter.Age}
+        Card No.: ${voter.cardno}`;
         } else {
           msg_body = "Voter not found";
         }
