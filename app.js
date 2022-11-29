@@ -56,35 +56,36 @@ app.post("/webhook", async (req, res) => {
       let voter = null;
       try {
         voter = await Voter.find({ cardno: msg_body });
-      } catch {
-        console.log("Voter not found");
-      }
-      if (voter) {
-        msg_body = `This is your details:
+        if (voter) {
+          msg_body = `This is your details:
         Ward_no: ${voter["Ward_no"]}
         SLNO: ${voter["SLNO"]}
         House No: ${voter["houseno"]}
         Name: ${voter["VNAME_ENGLISH"]}
         Age: ${voter["Age"]}
         Card No.: ${voter["cardno"]}`;
-      } else {
-        msg_body = "Voter not found";
+        } else {
+          msg_body = "Voter not found";
+        }
+
+        console.log("Message Body = ", msg_body);
+        axios({
+          method: "POST",
+          url:
+            "https://graph.facebook.com/v12.0/" +
+            phone_number_id +
+            "/messages?access_token=" +
+            process.env.WHATSAPP_TOKEN,
+          data: {
+            messaging_product: "whatsapp",
+            to: from,
+            text: { body: "Ack: \n" + msg_body },
+            headers: { "Content-Type": "application/json" },
+          },
+        });
+      } catch {
+        console.log("Voter not found");
       }
-      console.log("Message Body = ", msg_body);
-      axios({
-        method: "POST",
-        url:
-          "https://graph.facebook.com/v12.0/" +
-          phone_number_id +
-          "/messages?access_token=" +
-          process.env.WHATSAPP_TOKEN,
-        data: {
-          messaging_product: "whatsapp",
-          to: from,
-          text: { body: "Ack: \n" + msg_body },
-          headers: { "Content-Type": "application/json" },
-        },
-      });
     }
     res.sendStatus(200);
   } else {
