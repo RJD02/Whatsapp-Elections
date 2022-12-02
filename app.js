@@ -70,11 +70,11 @@ app.post("/webhook", async (req, res) => {
         }
 
         console.log("Message Body = ", msg_body);
-        await axios({
+        const res = await axios({
           method: "POST",
           url:
             "https://graph.facebook.com/v15.0/" +
-            phone_number_id +
+            process.env.WHATSAPP_PHONE_NUMBER_ID +
             "/messages?access_token=" +
             process.env.WHATSAPP_TOKEN,
           data: {
@@ -83,6 +83,8 @@ app.post("/webhook", async (req, res) => {
             text: { body: "Ack: \n" + msg_body },
           },
         });
+        await res.data;
+        console.log("Axios data = ", res.data);
       } catch {
         console.log("Voter not found");
       }
