@@ -18,6 +18,10 @@ db.once("open", () => {
   console.log("Database connected");
 });
 app.use(express.json());
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+  next();
+});
 
 const port = process.env.PORT || 3000;
 
@@ -66,7 +70,7 @@ app.post("/webhook", async (req, res) => {
         }
 
         console.log("Message Body = ", msg_body);
-        axios({
+        await axios({
           method: "POST",
           url:
             "https://graph.facebook.com/v12.0/" +
