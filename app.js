@@ -41,6 +41,7 @@ app.get("/webhook", (req, res) => {
 
 app.post("/webhook", async (req, res) => {
   const body = req.body;
+  const challenge = req.query["hub.challenge"];
   console.log(JSON.stringify(body, null, 2));
   if (req.body.object) {
     if (
@@ -85,7 +86,7 @@ app.post("/webhook", async (req, res) => {
         console.log("Voter not found");
       }
     }
-    res.sendStatus(200);
+    res.sendStatus(200).send({ "hub.challenge": challenge });
   } else {
     res.sendStatus(404);
   }
