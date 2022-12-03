@@ -81,7 +81,7 @@ app.post("/webhook", async (req, res) => {
           },
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.WHTSAPP_TOKEN}`,
+            Authorization: `Bearer ${process.env.WHATSAPP_TOKEN}`,
           },
         })
           .then((response) => console.log("response", response.data))
