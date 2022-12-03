@@ -22,7 +22,7 @@ app.use(express.json());
 
 const port = process.env.PORT || 3000;
 
-const VERIFY_TOKEN = "c5fcf44f-5faa-4a46-ad78-1504fa531781";
+const VERIFY_TOKEN = "helloworldthisiswhatsappelectionswebhookintesting";
 
 app.get("/webhook", (req, res) => {
   let mode = req.query["hub.mode"];
