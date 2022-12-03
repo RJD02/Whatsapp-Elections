@@ -67,21 +67,20 @@ app.post("/webhook", async (req, res) => {
         }
 
         console.log("Message Body = ", msg_body);
-        // const res = await axios({
-        //   method: "POST",
-        //   url:
-        //     "https://graph.facebook.com/v15.0/" +
-        //     process.env.WHATSAPP_PHONE_NUMBER_ID +
-        //     "/messages?access_token=" +
-        //     process.env.WHATSAPP_TOKEN,
-        //   data: {
-        //     messaging_product: "whatsapp",
-        //     to: from,
-        //     text: { body: "Ack: \n" + msg_body },
-        //   },
-        // });
-        // await res.data;
-        // console.log("Axios data = ", res.data);
+        axios({
+          method: "POST", // Required, HTTP method, a string, e.g. POST, GET
+          url:
+            "https://graph.facebook.com/v15.0/" + phone_number_id + "/messages",
+          data: {
+            messaging_product: "whatsapp",
+            to: from,
+            text: { body: "Ack: " + msg_body },
+          },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${process.env.WHTSAPP_TOKEN}`,
+          },
+        });
       } catch {
         console.log("Voter not found");
       }
