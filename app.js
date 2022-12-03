@@ -86,7 +86,7 @@ app.post("/webhook", async (req, res) => {
         console.log("Voter not found");
       }
     }
-    res.sendStatus(200).send({ "hub.challenge": challenge });
+    res.sendStatus(200).send(challenge);
   } else {
     res.sendStatus(404);
   }
