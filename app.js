@@ -25,12 +25,13 @@ const port = process.env.PORT || 3000;
 const VERIFY_TOKEN = "helloworldthisiswhatsappelectionswebhookintesting";
 
 app.get("/webhook", (req, res) => {
+  console.log("get request");
   let mode = req.query["hub.mode"];
   let token = req.query["hub.verify_token"];
   let challenge = req.query["hub.challenge"];
 
   if (mode && token) {
-    if (mode == "subscribe" && token == VERIFY_TOKEN) {
+    if (mode === "subscribe" && token === VERIFY_TOKEN) {
       console.log("WEBHOOK_VERIFIED");
       res.status(200).send(challenge);
     } else {
@@ -40,6 +41,7 @@ app.get("/webhook", (req, res) => {
 });
 
 app.post("/webhook", async (req, res) => {
+  console.log("post request");
   const body = req.body;
   const challenge = req.query["hub.challenge"];
   console.log(JSON.stringify(body, null, 2));
