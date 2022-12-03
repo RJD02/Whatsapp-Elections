@@ -19,10 +19,6 @@ db.once("open", () => {
   console.log("Database connected");
 });
 app.use(express.json());
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
-  next();
-});
 
 const port = process.env.PORT || 3000;
 
