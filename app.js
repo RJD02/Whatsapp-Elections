@@ -4,7 +4,7 @@ const app = express();
 const axios = require("axios");
 const Voter = require("./models/voters");
 const mongoose = require("mongoose");
-const { getData, deleteAll, addData } = require("./addData");
+// const { getData, deleteAll, addData } = require("./addData");
 
 mongoose.connect(
   `mongodb+srv://admin-raviraj:${process.env.MONGO_DB_PASSWORD}@cluster0.lkxsz.mongodb.net/whatsappIntegration?retryWrites=true&w=majority`,
@@ -24,9 +24,6 @@ app.use(function (req, res, next) {
   next();
 });
 
-// deleteAll();
-addData();
-getData();
 const port = process.env.PORT || 3000;
 
 const VERIFY_TOKEN = "c5fcf44f-5faa-4a46-ad78-1504fa531781";
@@ -100,7 +97,7 @@ app.post("/webhook", async (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  console.log('got home route')
+  console.log("got home route");
   res.send("It's RJ");
 });
 
