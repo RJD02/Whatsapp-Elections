@@ -83,7 +83,9 @@ app.post("/webhook", async (req, res) => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${process.env.WHTSAPP_TOKEN}`,
           },
-        });
+        })
+          .then((response) => console.log("response", response.data))
+          .catch((err) => console.log(err));
       } catch {
         console.log("Voter not found");
       }
