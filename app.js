@@ -31,7 +31,11 @@ const sendMessage = async (phone_number_id, from, msg_body) => {
     data: {
       messaging_product: "whatsapp",
       to: from,
-      text: { body: "Ack: " + msg_body },
+      type: "image",
+      image: {
+        link: "https://images.unsplash.com/photo-1670031652376-e2b853e67390?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
+        caption: "Ack: " + msg_body,
+      },
     },
     headers: {
       "Content-Type": "application/json",
