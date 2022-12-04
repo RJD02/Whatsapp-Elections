@@ -57,19 +57,19 @@ app.post("/webhook", async (req, res) => {
         req.body.entry[0].changes[0].value.metadata.phone_number_id;
       let from = req.body.entry[0].changes[0].value.messages[0].from;
       let msg_body = "";
-      if (req.body.entry[0].changes[0].value.messages[0].text.body)
+      if (req.body.entry[0].changes[0].value.messages[0].text)
         msg_body = req.body.entry[0].changes[0].value.messages[0].text.body;
       let voter = null;
       console.log("This is the card number", msg_body);
       try {
-        // voter = await Voter.find({ cardno: msg_body });
-        // console.log(voter[0]);
-        // voter = voter[0];
-        // if (voter) {
-        //   msg_body = `This is your details:\nWard_no: ${voter.Ward_no}\nSLNO: ${voter.SLNO}\nHouse No: ${voter.houseno}\nName: ${voter.VNAME_ENGLISH}\nAge: ${voter.Age}\nCard No.: ${voter.cardno}`;
-        // } else {
-        //   msg_body = "Voter not found";
-        // }
+        voter = await Voter.find({ cardno: msg_body });
+        console.log(voter[0]);
+        voter = voter[0];
+        if (voter) {
+          msg_body = `This is your details:\nWard_no: ${voter.Ward_no}\nSLNO: ${voter.SLNO}\nHouse No: ${voter.houseno}\nName: ${voter.VNAME_ENGLISH}\nAge: ${voter.Age}\nCard No.: ${voter.cardno}`;
+        } else {
+          msg_body = "Voter not found";
+        }
 
         console.log("Message Body = ", msg_body);
         axios({
