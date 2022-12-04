@@ -90,6 +90,7 @@ app.post("/webhook", async (req, res) => {
             },
           });
           const data2 = await data.data;
+          console.log(data2);
         } catch (err) {
           console.log("Axios error: ", err);
         }
