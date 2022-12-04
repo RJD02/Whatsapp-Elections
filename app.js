@@ -72,22 +72,27 @@ app.post("/webhook", async (req, res) => {
         }
 
         console.log("Message Body = ", msg_body);
-        await axios({
-          method: "POST", // Required, HTTP method, a string, e.g. POST, GET
-          url:
-            "https://graph.facebook.com/v13.0/" + phone_number_id + "/messages",
-          data: {
-            messaging_product: "whatsapp",
-            to: from,
-            text: { body: "Ack: " + msg_body },
-          },
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.WHATSAPP_TOKEN}`,
-          },
-        })
-          .then((response) => console.log("response", response.data))
-          .catch((err) => console.log(err));
+        try {
+          const data = await axios({
+            method: "POST", // Required, HTTP method, a string, e.g. POST, GET
+            url:
+              "https://graph.facebook.com/v13.0/" +
+              phone_number_id +
+              "/messages",
+            data: {
+              messaging_product: "whatsapp",
+              to: from,
+              text: { body: "Ack: " + msg_body },
+            },
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${process.env.WHATSAPP_TOKEN}`,
+            },
+          });
+          const data2 = await data.data;
+        } catch (err) {
+          console.log("Axios error: ", err);
+        }
       } catch {
         console.log("Voter not found");
       }
