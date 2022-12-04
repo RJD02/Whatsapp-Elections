@@ -72,7 +72,7 @@ app.post("/webhook", async (req, res) => {
         }
 
         console.log("Message Body = ", msg_body);
-        axios({
+        await axios({
           method: "POST", // Required, HTTP method, a string, e.g. POST, GET
           url:
             "https://graph.facebook.com/v13.0/" + phone_number_id + "/messages",
