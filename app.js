@@ -43,7 +43,7 @@ const sendMessage = async (phone_number_id, from, msg_body) => {
     },
   });
   const data = await response.data;
-  console.log(data);
+  console.log('Axios data', data);
 };
 
 app.get("/webhook", (req, res) => {
