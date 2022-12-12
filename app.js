@@ -108,7 +108,7 @@ app.post("/webhook", async (req, res) => {
 
 app.get("/", (req, res) => {
   console.log("got home route");
-  res.send("It's RJ");
+  res.send("It's RJ's turf");
 });
 
 app.listen(port, () => {
