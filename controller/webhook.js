@@ -51,14 +51,14 @@ module.exports.postHome = async (req, res) => {
   const details = getDetails(req);
   console.log(details);
   await sendTextWithImage(details.phone_number_id, details.from, "Hey there");
-  await sendInteractiveMessage(
-    details.phone_number_id,
-    details.from,
-    "Choose",
-    "This is title",
-    languageRows.getAllInfo(),
-    "This is footer"
-  );
+  // await sendInteractiveMessage(
+  //   details.phone_number_id,
+  //   details.from,
+  //   "Choose",
+  //   "This is title",
+  //   languageRows.getAllInfo(),
+  //   "This is footer"
+  // );
   res.sendStatus(200);
 };
 
