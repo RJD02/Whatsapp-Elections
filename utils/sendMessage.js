@@ -63,5 +63,7 @@ const sendInteractiveMessage = async (
       },
     },
   });
+  const data = await response.data;
+  console.log("Axios data", data);
 };
 module.exports = [sendTextWithImage, sendInteractiveMessage];
