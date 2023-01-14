@@ -1,6 +1,8 @@
+const { translate } = require("@vitalets/google-translate-api");
 const axios = require("axios");
 
-const sendMessage = async (phone_number_id, from, msg_body) => {
+const sendTextWithImage = async (phone_number_id, from, msg_body) => {
+  msg_body = translate(msg_body, { to: "kn" });
   const response = await axios({
     method: "POST", // Required, HTTP method, a string, e.g. POST, GET
     url: "https://graph.facebook.com/v12.0/" + phone_number_id + "/messages",
@@ -22,4 +24,44 @@ const sendMessage = async (phone_number_id, from, msg_body) => {
   console.log("Axios data", data);
 };
 
-module.exports = sendMessage;
+const sendInteractiveMessage = async (
+  phone_number_id,
+  from,
+  msg_body,
+  title,
+  rows,
+  footer
+) => {
+  const response = await axios({
+    method: "POST",
+    url: "https://graph.facebook.com/v12.0/" + phone_number_id + "/messages",
+    data: {
+      messaging_product: "whatsapp",
+      to: from,
+      type: "interactive",
+      interactive: {
+        type: "list",
+        header: {
+          type: "text",
+          text: title,
+        },
+        body: {
+          text: msg_body,
+        },
+        footer: {
+          text: footer,
+        },
+        action: {
+          button: "See List",
+          sections: [
+            {
+              title: title,
+              rows: rows,
+            },
+          ],
+        },
+      },
+    },
+  });
+};
+module.exports = [sendTextWithImage, sendInteractiveMessage];

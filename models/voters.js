@@ -23,6 +23,7 @@ const VoterSchema = new Schema({
   VNAME_ENGLISH: String,
   cardno: String,
   Age: Number,
+  PreferredLanguage: String,
 });
 
 module.exports = mongoose.model("Voter", VoterSchema);
