@@ -52,13 +52,13 @@ module.exports.postHome = async (req, res) => {
   console.log(details);
   if (msg_body === "" || msg_body in ["hello", "hi", "hey"]) {
     await sendTextWithImage(
-      phone_number_id,
-      from,
+      details.phone_number_id,
+      details.from,
       "Hey, did not get your instruction, please try again"
     );
     await sendInteractiveMessage(
-      phone_number_id,
-      from,
+      details.phone_number_id,
+      details.from,
       "List of things",
       "Choose Language",
       languageRows,
