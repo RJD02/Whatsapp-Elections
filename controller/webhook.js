@@ -65,6 +65,7 @@ module.exports.postHome = async (req, res) => {
       "Powered by *helloworld*"
     );
   }
+  res.sendStatus(200);
 };
 
 module.exports.setLanguageGet = (req, res) => {
