@@ -50,21 +50,15 @@ module.exports.postHome = async (req, res) => {
   console.log("post request");
   const details = getDetails(req);
   console.log(details);
-  if (details.msg_body === "" || details.msg_body in ["hello", "hi", "hey"]) {
-    await sendTextWithImage(
-      details.phone_number_id,
-      details.from,
-      "Hey, did not get your instruction, please try again"
-    );
-    await sendInteractiveMessage(
-      details.phone_number_id,
-      details.from,
-      "List of things",
-      "Choose Language",
-      languageRows,
-      "Powered by *helloworld*"
-    );
-  }
+  await sendTextWithImage(details.phone_number_id, details.from, "Hey there");
+  await sendInteractiveMessage(
+    details.phone_number_id,
+    details.from,
+    "Choose",
+    "This is title",
+    languageRows.getAllInfo(),
+    "This is footer"
+  );
   res.sendStatus(200);
 };
 
