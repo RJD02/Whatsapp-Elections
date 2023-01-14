@@ -1,8 +1,8 @@
-const { translate } = require("@vitalets/google-translate-api");
+const translateText = require("./translate");
 const axios = require("axios");
 
 const sendTextWithImage = async (phone_number_id, from, msg_body) => {
-  msg_body = translate(msg_body, { to: "kn" });
+  msg_body = translateText(msg_body, "kn");
   const response = await axios({
     method: "POST", // Required, HTTP method, a string, e.g. POST, GET
     url: "https://graph.facebook.com/v12.0/" + phone_number_id + "/messages",

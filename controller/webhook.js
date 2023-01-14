@@ -25,9 +25,9 @@ const getDetails = (req) => {
       let msg_body = "";
       if (req.body.entry[0].changes[0].value.messages[0].text)
         msg_body = req.body.entry[0].changes[0].value.messages[0].text.body;
+      return { phone_number_id, from, msg_body };
     }
   }
-  return { phone_number_id, from, msg_body };
 };
 
 module.exports.getHome = (req, res) => {
@@ -48,7 +48,8 @@ module.exports.getHome = (req, res) => {
 
 module.exports.postHome = async (req, res) => {
   console.log("post request");
-  const { phone_number_id, msg_body, from } = getDetails(req);
+  const details = getDetails(req);
+  console.log(details);
   if (msg_body === "" || msg_body in ["hello", "hi", "hey"]) {
     await sendTextWithImage(
       phone_number_id,
@@ -67,5 +68,5 @@ module.exports.postHome = async (req, res) => {
 };
 
 module.exports.setLanguageGet = (req, res) => {
-  sendTextWithImage();
+  // sendTextWithImage();
 };

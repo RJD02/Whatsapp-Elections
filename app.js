@@ -6,6 +6,7 @@ const Voter = require("./models/voters");
 const mongoose = require("mongoose");
 const sendMessage = require("./utils/sendMessage");
 const webHookRouter = require("./routes/webhookRoutes");
+const translateText = require("./utils/translate");
 // const { getData, deleteAll, addData } = require("./addData");
 
 mongoose.connect(

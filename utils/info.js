@@ -24,49 +24,67 @@ const basicRows = new Info(
   "Search your voter id",
   "Enter a voter id and search if it exists"
 );
-section1Rows.addInfo(
-  "See your family members",
-  "Get list of your family members"
-);
+basicRows.addInfo("See your family members", "Get list of your family members");
 
-console.log(section1Rows.getAllInfo());
+console.log(basicRows.getAllInfo());
 
 // section 2 for campaign related services
 const campaignRows = new Info(
   "Get campaign leaflet",
   "Get latest campaign info through leaflet"
 );
-section2Rows.addInfo("Get party's info", "Get all latest updates");
+campaignRows.addInfo("Get party's info", "Get all latest updates");
 
-console.log(section2Rows.getAllInfo());
+console.log(campaignRows.getAllInfo());
 
 // section 3 for service config
 const languageRows = new Info(
   "Kannada",
-  translateText("Set your language to Kannada", languageMappings.get("Kannada"))
+  async () =>
+    await translateText(
+      "Set your language to Kannada",
+      languageMappings.get("Kannada")
+    )
 );
 languageRows.addInfo(
   "English",
-  translateText(
-    "Set your language to English(default)",
-    languageMappings.get("English")
-  )
+  async () =>
+    await translateText(
+      "Set your language to English(default)",
+      languageMappings.get("English")
+    )
 );
 languageRows.addInfo(
   "Hindi",
-  translateText("Set your language to Hindi", languageMappings.get("Hindi"))
+  async () =>
+    await translateText(
+      "Set your language to Hindi",
+      languageMappings.get("Hindi")
+    )
 );
 languageRows.addInfo(
   "Marathi",
-  translateText("Set your language to Marathi", languageMappings.get("Marathi"))
+  async () =>
+    await translateText(
+      "Set your language to Marathi",
+      languageMappings.get("Marathi")
+    )
 );
 languageRows.addInfo(
   "Telugu",
-  translateText("Set your language to Telugu", languageMappings.get("Telugu"))
+  async () =>
+    await translateText(
+      "Set your language to Telugu",
+      languageMappings.get("Telugu")
+    )
 );
 languageRows.addInfo(
   "Urdu",
-  translateText("Set your language to Telugu", languageMappings.get("Urdu"))
+  async () =>
+    await translateText(
+      "Set your language to Telugu",
+      languageMappings.get("Urdu")
+    )
 );
 
-module.exports = [languageRows, campaignRows, basicRows];
+module.exports = [basicRows, campaignRows, languageRows];
