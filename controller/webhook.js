@@ -50,7 +50,7 @@ module.exports.postHome = async (req, res) => {
   console.log("post request");
   const details = getDetails(req);
   console.log(details);
-  if (msg_body === "" || msg_body in ["hello", "hi", "hey"]) {
+  if (details.msg_body === "" || details.msg_body in ["hello", "hi", "hey"]) {
     await sendTextWithImage(
       details.phone_number_id,
       details.from,
