@@ -6,7 +6,11 @@ const sendTextWithImage = async (phone_number_id, from, msg_body) => {
   try {
     const response = await axios({
       method: "POST", // Required, HTTP method, a string, e.g. POST, GET
-      url: "https://graph.facebook.com/v12.0/" + phone_number_id + "/messages",
+      url:
+        "https://graph.facebook.com/v12.0/" +
+        phone_number_id +
+        "/messages?access_token=" +
+        process.env.WHATSAPP_TOKEN,
       data: {
         messaging_product: "whatsapp",
         to: from,
@@ -15,10 +19,6 @@ const sendTextWithImage = async (phone_number_id, from, msg_body) => {
           link: "https://images.unsplash.com/photo-1670031652377-e2b853e67390?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
           caption: "Ack: " + msg_body,
         },
-      },
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.WHATSAPP_TOKEN}`,
       },
     });
     const data = await response.data;
@@ -39,7 +39,11 @@ const sendInteractiveMessage = async (
   try {
     const response = await axios({
       method: "POST",
-      url: "https://graph.facebook.com/v15.0/" + phone_number_id + "/messages",
+      url:
+        "https://graph.facebook.com/v15.0/" +
+        phone_number_id +
+        "/messages?access_token=" +
+        process.env.WHATSAPP_TOKEN,
       data: {
         messaging_product: "whatsapp",
         to: from,
