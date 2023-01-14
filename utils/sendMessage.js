@@ -32,38 +32,43 @@ const sendInteractiveMessage = async (
   rows,
   footer
 ) => {
-  const response = await axios({
-    method: "POST",
-    url: "https://graph.facebook.com/v12.0/" + phone_number_id + "/messages",
-    data: {
-      messaging_product: "whatsapp",
-      to: from,
-      type: "interactive",
-      interactive: {
-        type: "list",
-        header: {
-          type: "text",
-          text: title,
-        },
-        body: {
-          text: msg_body,
-        },
-        footer: {
-          text: footer,
-        },
-        action: {
-          button: "See List",
-          sections: [
-            {
-              title: title,
-              rows: rows,
-            },
-          ],
+  try {
+    const response = await axios({
+      method: "POST",
+      url: "https://graph.facebook.com/v12.0/" + phone_number_id + "/messages",
+      data: {
+        messaging_product: "whatsapp",
+        to: from,
+        type: "interactive",
+        interactive: {
+          type: "list",
+          header: {
+            type: "text",
+            text: title,
+          },
+          body: {
+            text: msg_body,
+          },
+          footer: {
+            text: footer,
+          },
+          action: {
+            button: "See List",
+            sections: [
+              {
+                title: title,
+                rows: rows,
+              },
+            ],
+          },
         },
       },
-    },
-  });
-  const data = await response.data;
-  console.log("Axios data", data);
+    });
+    const data = await response.data;
+    console.log("Axios data", data);
+  } catch (e) {
+    console.log("Error occured while firing interactive message");
+    console.log(e);
+  }
 };
 module.exports = [sendTextWithImage, sendInteractiveMessage];
