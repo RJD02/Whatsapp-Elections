@@ -66,14 +66,14 @@ module.exports.postHome = async (req, res) => {
         details.from,
         "Hey there"
       );
-      await sendInteractiveMessage(
-        details.phone_number_id,
-        details.from,
-        "Choose a language",
-        "Choose one language from below languages",
-        rows,
-        "Powered by *JS*"
-      );
+      // await sendInteractiveMessage(
+      //   details.phone_number_id,
+      //   details.from,
+      //   "Choose a language",
+      //   "Choose one language from below languages",
+      //   rows,
+      //   "Powered by *JS*"
+      // );
     } else {
       console.log("Found user initiated text");
     }
