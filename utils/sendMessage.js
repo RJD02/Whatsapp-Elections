@@ -4,7 +4,7 @@ const axios = require("axios");
 const sendTextWithImage = async (phone_number_id, from, msg_body) => {
   // msg_body = await translateText(msg_body, "kn");
   try {
-    await axios({
+    const resp = await axios({
       method: "POST", // Required, HTTP method, a string, e.g. POST, GET
       url:
         "https://graph.facebook.com/v15.0/" +
@@ -22,6 +22,8 @@ const sendTextWithImage = async (phone_number_id, from, msg_body) => {
       },
       headers: { "Content-Type": "application/json" },
     });
+    const data = await resp.data;
+    console.log(data);
   } catch (err) {
     console.log(err);
   }
@@ -37,7 +39,7 @@ const sendInteractiveMessage = async (
 ) => {
   console.log(rows);
   try {
-    await axios({
+    const resp = await axios({
       method: "POST",
       url:
         "https://graph.facebook.com/v15.0/" +
@@ -76,6 +78,8 @@ const sendInteractiveMessage = async (
         "Content-Type": "application/json",
       },
     });
+    const data = await resp.data;
+    console.log(data);
   } catch (e) {
     console.log("Error occured while firing interactive message");
     console.log(e);
