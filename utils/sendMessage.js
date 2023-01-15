@@ -36,6 +36,7 @@ const sendInteractiveMessage = async (
   rows,
   footer
 ) => {
+  console.log(rows);
   try {
     const response = await axios({
       method: "POST",
@@ -47,25 +48,26 @@ const sendInteractiveMessage = async (
       data: {
         messaging_product: "whatsapp",
         to: from,
+        recipient_type: "individual",
         type: "interactive",
         interactive: {
           type: "list",
           header: {
             type: "text",
-            text: title,
+            text: "Actions",
           },
           body: {
-            text: msg_body,
+            text: `${msg_body}`,
           },
           footer: {
-            text: footer,
+            text: `${footer}`,
           },
           action: {
-            button: "See List",
+            button: "See Actions",
             sections: [
               {
                 title: title,
-                rows: rows,
+                rows,
               },
             ],
           },

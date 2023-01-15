@@ -28,6 +28,7 @@ const getDetails = (req) => {
       return { phone_number_id, from, msg_body };
     }
   }
+  return {};
 };
 
 module.exports.getHome = (req, res) => {
@@ -52,14 +53,14 @@ module.exports.postHome = async (req, res) => {
   console.log(details);
   if (details.phone_number_id && details.from && details.msg_body)
     await sendTextWithImage(details.phone_number_id, details.from, "Hey there");
-  // await sendInteractiveMessage(
-  //   details.phone_number_id,
-  //   details.from,
-  //   "Choose",
-  //   "This is title",
-  //   languageRows.getAllInfo(),
-  //   "This is footer"
-  // );
+  await sendInteractiveMessage(
+    details.phone_number_id,
+    details.from,
+    "Choose",
+    "This is title",
+    languageRows.getAllInfo(),
+    "This is footer"
+  );
   res.sendStatus(200);
 };
 

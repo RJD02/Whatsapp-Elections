@@ -6,12 +6,12 @@ class Info {
   constructor(title, description) {
     this.title = title;
     this.description = description;
-    const id = randomUUID();
+    const id = String(randomUUID()).replace("-", "");
     this.allInfo = [{ title, description, id }];
   }
 
   addInfo(title, description) {
-    const id = randomUUID();
+    const id = String(randomUUID()).replace("-", "");
     this.allInfo.push({ title, description, id });
   }
   getAllInfo() {
@@ -26,7 +26,7 @@ const basicRows = new Info(
 );
 basicRows.addInfo("See your family members", "Get list of your family members");
 
-console.log(basicRows.getAllInfo());
+// console.log(basicRows.getAllInfo());
 
 // section 2 for campaign related services
 const campaignRows = new Info(
@@ -35,7 +35,7 @@ const campaignRows = new Info(
 );
 campaignRows.addInfo("Get party's info", "Get all latest updates");
 
-console.log(campaignRows.getAllInfo());
+// console.log(campaignRows.getAllInfo());
 
 // section 3 for service config
 const languageRows = new Info(
