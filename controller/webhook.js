@@ -1,10 +1,13 @@
 const [
   sendTextWithImage,
   sendInteractiveMessage,
+  sendText,
 ] = require("../utils/sendMessage");
-const { languageRows } = require("../utils/info");
+const { languageRows, basicRows, campaignRows } = require("../utils/info");
 const Voter = require("../models/voters");
 const axios = require("axios");
+const languageMappings = require("../utils/languageCodes");
+const translateText = require("../utils/translate");
 
 const VERIFY_TOKEN = "helloworldthisiswhatsappelectionswebhookintesting";
 
@@ -69,21 +72,72 @@ module.exports.postHome = async (req, res) => {
         req.body.entry[0].changes[0].value.metadata.phone_number_id;
       let from = req.body.entry[0].changes[0].value.messages[0].from; // extract the phone number from the webhook payload
       let msg_body = req.body.entry[0].changes[0].value.messages[0].text.body; // extract the message text from the webhook payload
-      // axios({
-      //   method: "POST", // Required, HTTP method, a string, e.g. POST, GET
-      //   url:
-      //     "https://graph.facebook.com/v15.0/" +
-      //     phone_number_id +
-      //     "/messages?access_token=" +
-      //     process.env.WHATSAPP_TOKEN,
-      //   data: {
-      //     messaging_product: "whatsapp",
-      //     to: from,
-      //     text: { body: "Ack: " + msg_body },
-      //   },
-      //   headers: { "Content-Type": "application/json" },
-      // });
-      await sendTextWithImage(phone_number_id, from, "Got your message");
+
+      const voter = await Voter.findOne({ mobileNumber: from });
+      if (voter && msg_body.split("\n")[0] in languageMappings.keys()) {
+        // voter with this mobile number is present and has requested to change default language
+        const language = msg_body.split("\n")[0];
+        voter.PreferredLanguage = languageMappings.get(language);
+        await voter.save();
+
+        await sendText(
+          phone_number_id,
+          from,
+          "From here on you will receive messages in " + language,
+          voter.PreferredLanguage
+        );
+        res.sendStatus(200);
+      } else if (voter) {
+        // voter with this mobile number is present
+        const languageRowsList = (await languageRows).getAllInfo();
+        const basicRowsList = basicRows.getAllInfo();
+        const campaignRowsList = campaignRows.getAllInfo();
+        const languagePreferenceTitle = await translateText(
+          "Language Preference",
+          voter.PreferredLanguage
+        );
+        const basicServicesTitle = await translateText(
+          "Basic Services",
+          voter.PreferredLanguage
+        );
+        const campaignServicesTitle = await translateText(
+          "Campaign Info",
+          voter.PreferredLanguage
+        );
+        const sections = [
+          { title: languagePreferenceTitle, rows: languageRowsList },
+          {
+            title: basicServicesTitle,
+            rows: basicRowsList,
+          },
+          { title: campaignServicesTitle, rows: campaignRowsList },
+        ];
+        await sendInteractiveMessage(
+          phone_number_id,
+          from,
+          msg_body,
+          sections,
+          footer
+        );
+        res.sendStatus(200);
+      } else if (msg_body) {
+        const user = await Voter.findOne({ cardno: msg_body });
+        if (user) {
+          // card number exists
+          user.mobileNumber = from;
+          await user.save();
+          res.sendStatus(200);
+        } else {
+          await sendText(
+            phone_number_id,
+            from,
+            "The card number is invalid, please try again"
+          );
+        }
+      } else {
+        // ask to mention his card
+        await sendText(phone_number_id, from, "Please enter your voter card");
+      }
     }
     res.sendStatus(200);
   } else {

@@ -24,6 +24,7 @@ const VoterSchema = new Schema({
   cardno: String,
   Age: Number,
   PreferredLanguage: String,
+  mobileNumber: String,
 });
 
 module.exports = mongoose.model("Voter", VoterSchema);

@@ -18,7 +18,7 @@ const ipAddresses = [
 const agents = ipAddresses.map((s) => createHttpProxyAgent("http://" + s));
 const translateText = async (msg, to = "en") => {
   try {
-    const translatedText = await translate(msg, { from: "en", to });
+    const translatedText = await translate(msg, { to });
     return translatedText;
   } catch (e) {
     return "";
