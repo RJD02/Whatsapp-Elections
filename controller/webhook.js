@@ -83,7 +83,7 @@ module.exports.postHome = async (req, res) => {
       //   },
       //   headers: { "Content-Type": "application/json" },
       // });
-      sendTextWithImage(phone_number_id, from, "Got your message");
+      await sendTextWithImage(phone_number_id, from, "Got your message");
     }
     res.sendStatus(200);
   } else {

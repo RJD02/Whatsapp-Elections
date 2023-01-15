@@ -1,10 +1,10 @@
 const translateText = require("./translate");
 const axios = require("axios");
 
-const sendTextWithImage = (phone_number_id, from, msg_body) => {
+const sendTextWithImage = async (phone_number_id, from, msg_body) => {
   // msg_body = await translateText(msg_body, "kn");
   try {
-    axios({
+    await axios({
       method: "POST", // Required, HTTP method, a string, e.g. POST, GET
       url:
         "https://graph.facebook.com/v15.0/" +
@@ -27,7 +27,7 @@ const sendTextWithImage = (phone_number_id, from, msg_body) => {
   }
 };
 
-const sendInteractiveMessage = (
+const sendInteractiveMessage = async (
   phone_number_id,
   from,
   msg_body,
@@ -37,7 +37,7 @@ const sendInteractiveMessage = (
 ) => {
   console.log(rows);
   try {
-    axios({
+    await axios({
       method: "POST",
       url:
         "https://graph.facebook.com/v15.0/" +
