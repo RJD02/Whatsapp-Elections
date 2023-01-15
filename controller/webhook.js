@@ -74,6 +74,8 @@ module.exports.postHome = async (req, res) => {
         rows,
         "Powered by *JS*"
       );
+    } else {
+      console.log("Found user initiated text");
     }
   } catch (e) {
     console.log("error occurred when trying posting request");
