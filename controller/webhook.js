@@ -51,7 +51,7 @@ module.exports.postHome = async (req, res) => {
   console.log("post request");
   const details = getDetails(req);
   const rows = (await languageRows).getAllInfo();
-  if (details.phone_number_id && details.from && details.msg_body) {
+  if (details?.phone_number_id && details?.from && details?.msg_body) {
     await sendTextWithImage(details.phone_number_id, details.from, "Hey there");
     await sendInteractiveMessage(
       details.phone_number_id,
