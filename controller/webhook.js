@@ -69,20 +69,21 @@ module.exports.postHome = async (req, res) => {
         req.body.entry[0].changes[0].value.metadata.phone_number_id;
       let from = req.body.entry[0].changes[0].value.messages[0].from; // extract the phone number from the webhook payload
       let msg_body = req.body.entry[0].changes[0].value.messages[0].text.body; // extract the message text from the webhook payload
-      axios({
-        method: "POST", // Required, HTTP method, a string, e.g. POST, GET
-        url:
-          "https://graph.facebook.com/v15.0/" +
-          phone_number_id +
-          "/messages?access_token=" +
-          process.env.WHATSAPP_TOKEN,
-        data: {
-          messaging_product: "whatsapp",
-          to: from,
-          text: { body: "Ack: " + msg_body },
-        },
-        headers: { "Content-Type": "application/json" },
-      });
+      // axios({
+      //   method: "POST", // Required, HTTP method, a string, e.g. POST, GET
+      //   url:
+      //     "https://graph.facebook.com/v15.0/" +
+      //     phone_number_id +
+      //     "/messages?access_token=" +
+      //     process.env.WHATSAPP_TOKEN,
+      //   data: {
+      //     messaging_product: "whatsapp",
+      //     to: from,
+      //     text: { body: "Ack: " + msg_body },
+      //   },
+      //   headers: { "Content-Type": "application/json" },
+      // });
+      sendTextWithImage(phone_number_id, from, "Got your message");
     }
     res.sendStatus(200);
   } else {
