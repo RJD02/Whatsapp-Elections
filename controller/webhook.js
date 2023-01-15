@@ -49,20 +49,34 @@ module.exports.getHome = (req, res) => {
 
 module.exports.postHome = async (req, res) => {
   console.log("post request");
-  const details = getDetails(req);
-  const rows = (await languageRows).getAllInfo();
-  if (details && details.msg_body && details.phone_number_id && details.from) {
-    await sendTextWithImage(details.phone_number_id, details.from, "Hey there");
-    await sendInteractiveMessage(
-      details.phone_number_id,
-      details.from,
-      "Choose a language",
-      "Choose one language from below languages",
-      rows,
-      "Powered by *JS*"
-    );
+  try {
+    const details = getDetails(req);
+    const rows = (await languageRows).getAllInfo();
+    if (
+      details &&
+      details.msg_body &&
+      details.phone_number_id &&
+      details.from
+    ) {
+      await sendTextWithImage(
+        details.phone_number_id,
+        details.from,
+        "Hey there"
+      );
+      await sendInteractiveMessage(
+        details.phone_number_id,
+        details.from,
+        "Choose a language",
+        "Choose one language from below languages",
+        rows,
+        "Powered by *JS*"
+      );
+    }
+    res.sendStatus(200);
+  } catch (e) {
+    console.log("error occurred when trying posting request");
+    res.sendStatus(200);
   }
-  res.sendStatus(200);
 };
 
 module.exports.setLanguageGet = (req, res) => {
