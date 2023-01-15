@@ -151,16 +151,9 @@ module.exports.setLanguageGet = (req, res) => {
 };
 
 // const test = async () => {
-//   await sendTextWithImage("102405086054943", "919595743489", "Hello World");
+//   await sendTextWithImage("102405086054943", "919595743489", "Hello");
 //   const rows = (await languageRows).getAllInfo();
-//   await sendInteractiveMessage(
-//     "102405086054943",
-//     "919595743489",
-//     "Choose from",
-//     "Title",
-//     rows,
-//     "This is footer"
-//   );
+//   await sendText("102405086054943", "919595743489", "Hello World");
 //   console.log("Testing");
 // };
 

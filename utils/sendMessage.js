@@ -22,7 +22,7 @@ const sendTextWithImage = async (
         to: from,
         type: "image",
         image: {
-          link: "https://images.unsplash.com/photo-1670031652377-e2b853e67390?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60https://images.unsplash.com/photo-1673731215529-a45181460626?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
+          link: "https://images.unsplash.com/photo-1673731215529-a45181460626?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=749&q=80",
           caption: "Ack: " + msg_body,
         },
       },
@@ -53,10 +53,8 @@ const sendText = async (
       data: {
         messaging_product: "whatsapp",
         to: from,
-        type: "text",
-        body: msg_body,
+        text: { body: msg_body },
       },
-      headers: { "Content-Type": "application/json" },
     });
     const data = await resp.data;
     console.log(data);
