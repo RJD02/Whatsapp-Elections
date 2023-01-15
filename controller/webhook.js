@@ -88,7 +88,6 @@ module.exports.postHome = async (req, res) => {
     // Return a '404 Not Found' if event is not from a WhatsApp API
     res.sendStatus(404);
   }
-  res.sendStatus(200);
 };
 
 module.exports.setLanguageGet = (req, res) => {
