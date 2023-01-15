@@ -2,7 +2,7 @@ const [
   sendTextWithImage,
   sendInteractiveMessage,
 ] = require("../utils/sendMessage");
-const [languageRows] = require("../utils/info");
+const { languageRows } = require("../utils/info");
 const Voter = require("../models/voters");
 
 const VERIFY_TOKEN = "helloworldthisiswhatsappelectionswebhookintesting";
@@ -50,20 +50,37 @@ module.exports.getHome = (req, res) => {
 module.exports.postHome = async (req, res) => {
   console.log("post request");
   const details = getDetails(req);
-  console.log(details);
-  if (details.phone_number_id && details.from && details.msg_body)
+  const rows = (await languageRows).getAllInfo();
+  if (details.phone_number_id && details.from && details.msg_body) {
     await sendTextWithImage(details.phone_number_id, details.from, "Hey there");
-  await sendInteractiveMessage(
-    details.phone_number_id,
-    details.from,
-    "Choose",
-    "This is title",
-    languageRows.getAllInfo(),
-    "This is footer"
-  );
+    await sendInteractiveMessage(
+      details.phone_number_id,
+      details.from,
+      "Choose a language",
+      "Choose one language from below languages",
+      rows,
+      "Powered by *JS*"
+    );
+  }
   res.sendStatus(200);
 };
 
 module.exports.setLanguageGet = (req, res) => {
   // sendTextWithImage();
 };
+
+// const test = async () => {
+//   await sendTextWithImage("102405086054943", "919595743489", "Hello World");
+//   const rows = (await languageRows).getAllInfo();
+//   await sendInteractiveMessage(
+//     "102405086054943",
+//     "919595743489",
+//     "Choose from",
+//     "Title",
+//     rows,
+//     "This is footer"
+//   );
+//   console.log("Testing");
+// };
+
+// test();
