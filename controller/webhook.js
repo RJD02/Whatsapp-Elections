@@ -86,7 +86,7 @@ module.exports.postHome = async (req, res) => {
           "From here on you will receive messages in " + language,
           voter.PreferredLanguage
         );
-        res.sendStatus(200);
+        return res.sendStatus(200);
       } else if (voter) {
         // voter with this mobile number is present
         const languageRowsList = (await languageRows).getAllInfo();
@@ -119,14 +119,14 @@ module.exports.postHome = async (req, res) => {
           sections,
           footer
         );
-        res.sendStatus(200);
+        return res.sendStatus(200);
       } else if (msg_body) {
         const user = await Voter.findOne({ cardno: msg_body });
         if (user) {
           // card number exists
           user.mobileNumber = from;
           await user.save();
-          res.sendStatus(200);
+          return res.sendStatus(200);
         } else {
           await sendText(
             phone_number_id,
