@@ -28,7 +28,7 @@ const getDetails = (req) => {
       return { phone_number_id, from, msg_body };
     }
   }
-  return {};
+  return null;
 };
 
 module.exports.getHome = (req, res) => {
@@ -72,11 +72,10 @@ module.exports.postHome = async (req, res) => {
         "Powered by *JS*"
       );
     }
-    res.sendStatus(200);
   } catch (e) {
     console.log("error occurred when trying posting request");
-    res.sendStatus(200);
   }
+  res.sendStatus(200);
 };
 
 module.exports.setLanguageGet = (req, res) => {
