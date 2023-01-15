@@ -28,7 +28,7 @@ const getDetails = (req) => {
       return { phone_number_id, from, msg_body };
     }
   }
-  return null;
+  // return null;
 };
 
 module.exports.getHome = (req, res) => {
@@ -49,9 +49,12 @@ module.exports.getHome = (req, res) => {
 
 module.exports.postHome = async (req, res) => {
   console.log("post request");
+
+  const details = getDetails(req);
+  // console.log(details);
   try {
-    const details = getDetails(req);
     const rows = (await languageRows).getAllInfo();
+    console.log(rows);
     if (
       details &&
       details.msg_body &&
@@ -82,18 +85,18 @@ module.exports.setLanguageGet = (req, res) => {
   // sendTextWithImage();
 };
 
-const test = async () => {
-  await sendTextWithImage("102405086054943", "919595743489", "Hello World");
-  const rows = (await languageRows).getAllInfo();
-  await sendInteractiveMessage(
-    "102405086054943",
-    "919595743489",
-    "Choose from",
-    "Title",
-    rows,
-    "This is footer"
-  );
-  console.log("Testing");
-};
+// const test = async () => {
+//   await sendTextWithImage("102405086054943", "919595743489", "Hello World");
+//   const rows = (await languageRows).getAllInfo();
+//   await sendInteractiveMessage(
+//     "102405086054943",
+//     "919595743489",
+//     "Choose from",
+//     "Title",
+//     rows,
+//     "This is footer"
+//   );
+//   console.log("Testing");
+// };
 
-test();
+// test();

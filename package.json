@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js",
+    "start": "nodemon app.js",
     "ts": "ts-node src/app.ts"
   },
   "keywords": [],
@@ -19,7 +19,8 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "free-translate": "^0.6.1",
-    "mongoose": "^6.7.4"
+    "mongoose": "^6.7.4",
+    "nodemon": "^2.0.20"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
