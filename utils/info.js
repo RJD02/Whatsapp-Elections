@@ -38,53 +38,44 @@ campaignRows.addInfo("Get party's info", "Get all latest updates");
 // console.log(campaignRows.getAllInfo());
 
 // section 3 for service config
-const languageRows = new Info(
-  "Kannada",
-  async () =>
-    await translateText(
-      "Set your language to Kannada",
-      languageMappings.get("Kannada")
-    )
-);
-languageRows.addInfo(
-  "English",
-  async () =>
-    await translateText(
-      "Set your language to English(default)",
-      languageMappings.get("English")
-    )
-);
-languageRows.addInfo(
-  "Hindi",
-  async () =>
-    await translateText(
-      "Set your language to Hindi",
-      languageMappings.get("Hindi")
-    )
-);
-languageRows.addInfo(
-  "Marathi",
-  async () =>
-    await translateText(
-      "Set your language to Marathi",
-      languageMappings.get("Marathi")
-    )
-);
-languageRows.addInfo(
-  "Telugu",
-  async () =>
-    await translateText(
-      "Set your language to Telugu",
-      languageMappings.get("Telugu")
-    )
-);
-languageRows.addInfo(
-  "Urdu",
-  async () =>
-    await translateText(
-      "Set your language to Telugu",
-      languageMappings.get("Urdu")
-    )
-);
+const getLanguageRows = async () => {
+  const kannadaDesc = await translateText(
+    "Set your language to Kannada",
+    languageMappings.get("Kannada")
+  );
+  const englishDesc = await translateText(
+    "Set your language to English(default)",
+    languageMappings.get("English")
+  );
+  const hindiDesc = await translateText(
+    "Set your languge to Hindi",
+    languageMappings.get("Hindi")
+  );
+  const teluguDesc = await translateText(
+    "Set your language to Telugu",
+    languageMappings.get("Telugu")
+  );
+  const marathiDesc = await translateText(
+    "Set your language to Marathi",
+    languageMappings.get("Marathi")
+  );
+  const urduDesc = await translateText(
+    "Set your language to Urdu",
+    languageMappings.get("Urdu")
+  );
 
-module.exports = [basicRows, campaignRows, languageRows];
+  const languageRows = new Info("Kannada", kannadaDesc);
+  languageRows.addInfo("English", englishDesc);
+
+  languageRows.addInfo("Hindi", hindiDesc);
+
+  languageRows.addInfo("Marathi", marathiDesc);
+  languageRows.addInfo("Telugu", teluguDesc);
+  languageRows.addInfo("Urdu", urduDesc);
+
+  return languageRows;
+};
+
+const languageRows = getLanguageRows();
+
+module.exports = { basicRows, campaignRows, languageRows };
