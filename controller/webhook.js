@@ -58,6 +58,9 @@ module.exports.postHome = async (req, res) => {
 
   // Check the Incoming webhook message
   console.log(JSON.stringify(req.body, null, 2));
+  console.log(JSON.stringify(req.body));
+  console.log(body);
+  // console.log(JSON.parse(req.body));
 
   // info on WhatsApp text message payload: https://developers.facebook.com/docs/whatsapp/cloud-api/webhooks/payload-examples#text-messages
   if (req.body.object) {
@@ -117,7 +120,7 @@ module.exports.postHome = async (req, res) => {
           from,
           msg_body,
           sections,
-          footer
+          "Powered by *helloworld*"
         );
         return res.sendStatus(200);
       } else if (msg_body) {
