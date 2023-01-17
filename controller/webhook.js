@@ -77,7 +77,8 @@ module.exports.postHome = async (req, res) => {
       let msg_body = req.body.entry[0].changes[0].value.messages[0].text.body; // extract the message text from the webhook payload
 
       const voter = await Voter.findOne({ mobileNumber: from });
-      if (voter && msg_body.split("\n")[0] in languageMappings.keys()) {
+      console.log(languageMappings.get(msg_body.split("\n")[0]));
+      if (voter && languageMappings.get(msg_body.split("\n")[0])) {
         // voter with this mobile number is present and has requested to change default language
         const language = msg_body.split("\n")[0];
         voter.PreferredLanguage = languageMappings.get(language);
@@ -118,7 +119,7 @@ module.exports.postHome = async (req, res) => {
         await sendInteractiveMessage(
           phone_number_id,
           from,
-          msg_body,
+          "Here are all your actions",
           sections,
           "Powered by *helloworld*"
         );
@@ -129,6 +130,7 @@ module.exports.postHome = async (req, res) => {
           // card number exists
           user.mobileNumber = from;
           await user.save();
+          console.log("Saving user's number");
           return res.sendStatus(200);
         } else {
           await sendText(
