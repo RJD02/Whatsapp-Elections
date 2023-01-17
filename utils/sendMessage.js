@@ -32,7 +32,7 @@ const sendTextWithImage = async (
     const data = await resp.data;
     console.log(data);
   } catch (err) {
-    console.log(err.response);
+    console.log(err.response.data);
   }
 };
 
@@ -61,7 +61,7 @@ const sendText = async (
     const data = await resp.data;
     console.log(data);
   } catch (err) {
-    console.log(err.response);
+    console.log(err.response.data);
   }
 };
 
@@ -113,7 +113,7 @@ const sendInteractiveMessage = async (
     console.log(data.error);
   } catch (e) {
     console.log("Error occured while firing interactive message");
-    console.log(e.response);
+    console.log(e.response.data);
   }
 };
 module.exports = [sendTextWithImage, sendInteractiveMessage, sendText];
