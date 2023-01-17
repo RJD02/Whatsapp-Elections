@@ -32,7 +32,7 @@ const sendTextWithImage = async (
     const data = await resp.data;
     console.log(data);
   } catch (err) {
-    console.log(err);
+    console.log(err.response);
   }
 };
 
@@ -61,7 +61,7 @@ const sendText = async (
     const data = await resp.data;
     console.log(data);
   } catch (err) {
-    console.log(err);
+    console.log(err.response);
   }
 };
 
