@@ -128,13 +128,18 @@ module.exports.postHome = async (req, res) => {
           // card number exists
           user.mobileNumber = from;
           await user.save();
+          await sendText(
+            phone_number_id,
+            from,
+            "Saved your number now you can use our services"
+          );
           console.log("Saving user's number");
           return res.sendStatus(200);
         } else {
           await sendText(
             phone_number_id,
             from,
-            "The card number is invalid, please try again"
+            "Please enter your voter card number to continue"
           );
         }
       } else {
