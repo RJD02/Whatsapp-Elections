@@ -21,8 +21,5 @@
     "free-translate": "^0.6.1",
     "mongoose": "^6.7.4",
     "nodemon": "^2.0.20"
-  },
-  "devDependencies": {
-    "http-proxy-agent": "^5.0.0"
   }
 }
