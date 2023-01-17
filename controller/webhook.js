@@ -151,9 +151,22 @@ module.exports.setLanguageGet = (req, res) => {
 };
 
 // const test = async () => {
-//   await sendTextWithImage("102405086054943", "919595743489", "Hello");
-//   const rows = (await languageRows).getAllInfo();
-//   await sendText("102405086054943", "919595743489", "Hello World");
+//   // await sendTextWithImage("102405086054943", "919595743489", "Hello");
+//   // const rows = (await languageRows).getAllInfo();
+//   // await sendText("102405086054943", "9595743489", "Hello World");
+//   const sections = [
+//     {
+//       title: "Hello World",
+//       rows: [{ id: "12", title: "First", description: "First one" }],
+//     },
+//   ];
+//   await sendInteractiveMessage(
+//     "102405086054943",
+//     "919595743489",
+//     "Hey",
+//     sections,
+//     "Footer"
+//   );
 //   console.log("Testing");
 // };
 
