@@ -1,0 +1,125 @@
+import {
+  AxiosImageData,
+  AxiosInteractiveData,
+  AxiosTextData,
+  Section,
+} from "./axiosDataInterface";
+import { translateText } from "./translate";
+import { languageMappings } from "./languageMappings";
+import axios from "axios";
+
+const getURL = (phoneNumberId: string): string => {
+  const url =
+    "https://graph.facebook.com/v15.0/" +
+    phoneNumberId +
+    "/messages?access_token=" +
+    process.env.WHATSAPP_TOKEN;
+  return url;
+};
+
+export const sendTextWithImage = async (
+  phoneNumberId: string,
+  from: string,
+  msgBody: string,
+  preferredLanguage = languageMappings.get("English")
+) => {
+  msgBody = await translateText(msgBody, preferredLanguage);
+  // object to send
+  const axiosData: AxiosImageData = {
+    messaging_product: "whatsapp",
+    to: from,
+    type: "image",
+    image: {
+      link: "https://images.unsplash.com/photo-1661961110218-35af7210f803?ixlib=rb-4.0.3&ixid=MnwxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHwxfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
+      caption: "Ack: " + msgBody,
+    },
+    recipient_type: "individual",
+  };
+  try {
+    // send the message with image
+    const resp = await axios({
+      method: "POST",
+      url: getURL(phoneNumberId),
+      data: axiosData,
+      headers: { "Content-Type": "application/json" },
+    });
+    const data = await resp.data;
+  } catch (e: any) {
+    console.log("Error while sending text with image");
+    console.log(e.response);
+  }
+};
+
+export const sendText = async (
+  phoneNumberId: string,
+  from: String,
+  msgBody: string,
+  preferredLanguage = languageMappings.get("English")
+) => {
+  msgBody = await translateText(msgBody, preferredLanguage);
+  // object to send
+  const axiosData: AxiosTextData = {
+    messaging_product: "whatsapp",
+    to: from,
+    type: "text",
+    text: { body: msgBody },
+    recipient_type: "individual",
+  };
+  try {
+    const resp = await axios({
+      method: "POST",
+      url: getURL(phoneNumberId),
+      data: JSON.stringify(axiosData),
+      headers: { "Content-Type": "application/json" },
+    });
+    const data = await resp.data;
+    console.log(data);
+  } catch (e: any) {
+    console.log("Error while sending text");
+    console.log(e.response);
+  }
+};
+
+export const sendInteractiveMessage = async (
+  phoneNumberId: string,
+  from: string,
+  msgBody: string,
+  sections: Section[],
+  footer: string
+) => {
+  const axiosData: AxiosInteractiveData = {
+    messaging_product: "whatsapp",
+    recipient_type: "individual",
+    to: from,
+    type: "interactive",
+    interactive: {
+      type: "list",
+      header: {
+        type: "text",
+        text: "Actions",
+      },
+      body: {
+        text: msgBody,
+      },
+      footer: {
+        text: footer,
+      },
+      action: {
+        button: "See actions",
+        sections,
+      },
+    },
+  };
+  try {
+    const resp = await axios({
+      method: "POST",
+      url: getURL(phoneNumberId),
+      data: axiosData,
+    });
+    const data = await resp.data;
+    console.log(data);
+  } catch (e: any) {
+    console.log("Error while sending interactive message");
+    console.log(e.any);
+  }
+};
