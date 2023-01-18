@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.languageMappings = void 0;
+exports.languageMappings = new Map();
+exports.languageMappings.set("English", "en");
+exports.languageMappings.set("Kannada", "kn");
+exports.languageMappings.set("Hindi", "hi");
+exports.languageMappings.set("Marathi", "mr");
+exports.languageMappings.set("Telugu", "te");
+exports.languageMappings.set("Urdu", "ur");
