@@ -1,29 +1,30 @@
-import { Application, Request, Response } from "express";
-require("dotenv").config();
-const express = require("express");
-const app: Application = express();
-const mongoose = require("mongoose");
+import dotenv from "dotenv";
+dotenv.config();
+import express, { Request, Response } from "express";
+import mongoose from "mongoose";
+import { router as webhooKRouter } from "./routes/webhookRoutes";
+const app = express();
+
+const PORT = process.env.PORT || 3000;
 
 mongoose.connect(
-  `mongodb+srv://admin-raviraj:${process.env.MONGO_DB_PASSWORD}@cluster0.lkxsz.mongodb.net/whatsappIntegration?retryWrites=true&w=majority`,
-  {
-    useUnifiedTopology: true,
-  }
+  `mongodb+srv://admin-raviraj:${process.env.MONGO_DB_PASSWORD}@cluster0.lkxsz.mongodb.net/whatsappIntegration?retryWrites=true&w=majority`
 );
+
 const db = mongoose.connection;
-db.on("error", console.error.bind("Connection error!"));
-db.once("open", () => {
-  console.log("Database connected");
+db.on("error", console.error.bind("connection error!"));
+db.once("open", (): void => {
+  console.log("Database connected!");
 });
 
 app.use(express.json());
-
-const port = process.env.PORT || 8000;
+app.use("/webhook", webhooKRouter);
 
 app.get("/", (req: Request, res: Response): void => {
-  res.send("Hello world");
+  console.log("Got original home");
+  res.sendStatus(200);
 });
 
-app.listen(port, (): void => {
-  console.log("Server listening on port", port);
+app.listen(PORT, (): void => {
+  console.log("Listening on port", PORT);
 });
