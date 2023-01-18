@@ -7,8 +7,12 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
+// mongoose.connect(
+//   `mongodb+srv://admin-raviraj:${process.env.MONGO_DB_PASSWORD}@cluster0.lkxsz.mongodb.net/whatsappIntegration?retryWrites=true&w=majority`
+// );
+
 mongoose.connect(
-  `mongodb+srv://admin-raviraj:${process.env.MONGO_DB_PASSWORD}@cluster0.lkxsz.mongodb.net/whatsappIntegration?retryWrites=true&w=majority`
+  `mongodb://mongo:${process.env.MONGO_DB_PASSWORD}@containers-us-west-183.railway.app:${process.env.MONGO_DB_PORT}`
 );
 
 const db = mongoose.connection;
