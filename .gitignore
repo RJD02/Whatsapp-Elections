@@ -2,3 +2,7 @@ node_modules/
 test/
 assets/
 .env
+Voters.json
+addData.ts
+json-typings.d.ts
+addData.js
