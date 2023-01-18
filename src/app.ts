@@ -28,3 +28,5 @@ app.get("/", (req: Request, res: Response): void => {
 app.listen(PORT, (): void => {
   console.log("Listening on port", PORT);
 });
+
+// Nicely converted original JS to typescript
