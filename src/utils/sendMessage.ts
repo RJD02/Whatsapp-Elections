@@ -23,19 +23,19 @@ export const sendTextWithImage = async (
   msgBody: string,
   preferredLanguage = languageMappings.get("English")
 ) => {
-  msgBody = await translateText(msgBody, preferredLanguage);
-  // object to send
-  const axiosData: AxiosImageData = {
-    messaging_product: "whatsapp",
-    to: from,
-    type: "image",
-    image: {
-      link: "https://images.unsplash.com/photo-1661961110218-35af7210f803?ixlib=rb-4.0.3&ixid=MnwxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHwxfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
-      caption: "Ack: " + msgBody,
-    },
-    recipient_type: "individual",
-  };
   try {
+    msgBody = await translateText(msgBody, preferredLanguage);
+    // object to send
+    const axiosData: AxiosImageData = {
+      messaging_product: "whatsapp",
+      to: from,
+      type: "image",
+      image: {
+        link: "https://images.unsplash.com/photo-1661961110218-35af7210f803?ixlib=rb-4.0.3&ixid=MnwxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHwxfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
+        caption: "Ack: " + msgBody,
+      },
+      recipient_type: "individual",
+    };
     // send the message with image
     const resp = await axios({
       method: "POST",
@@ -56,16 +56,16 @@ export const sendText = async (
   msgBody: string,
   preferredLanguage = languageMappings.get("English")
 ) => {
-  msgBody = await translateText(msgBody, preferredLanguage);
-  // object to send
-  const axiosData: AxiosTextData = {
-    messaging_product: "whatsapp",
-    to: from,
-    type: "text",
-    text: { body: msgBody },
-    recipient_type: "individual",
-  };
   try {
+    msgBody = await translateText(msgBody, preferredLanguage);
+    // object to send
+    const axiosData: AxiosTextData = {
+      messaging_product: "whatsapp",
+      to: from,
+      type: "text",
+      text: { body: msgBody },
+      recipient_type: "individual",
+    };
     const resp = await axios({
       method: "POST",
       url: getURL(phoneNumberId),
