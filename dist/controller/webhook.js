@@ -85,7 +85,7 @@ const postHome = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 return res.sendStatus(200);
             }
             else {
-                res.sendStatus(200);
+                return res.sendStatus(200);
             }
         }
     }
