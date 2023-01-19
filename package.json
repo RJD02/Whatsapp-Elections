@@ -8,9 +8,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm run build && node ./dist/app.js",
-    "build": "node ./node_modules/puppeteer/install.js && tsc -p .",
-    "dev": "nodemon ./dist/app.js"
+    "start": "npm run build && node app.js",
+    "build": "node ./node_modules/puppeteer/install.js && tsc -p ."
   },
   "keywords": [],
   "author": "",
