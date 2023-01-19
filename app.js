@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const child_process_1 = require("child_process");
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const express_1 = __importDefault(require("express"));
@@ -24,6 +25,17 @@ try {
 catch (e) {
     console.log("Mongo connection error");
 }
+(0, child_process_1.exec)("node ./node_modules/puppeteer/install.js", (err, stdout, stderr) => {
+    if (err) {
+        console.log(`error: ${err.message}`);
+        return;
+    }
+    if (stderr) {
+        console.log(`stderr: ${stderr}`);
+        return;
+    }
+    console.log(`stdout: ${stdout}`);
+});
 app.use(express_1.default.json());
 app.use("/webhook", webhookRoutes_1.router);
 app.get("/", (req, res) => {
