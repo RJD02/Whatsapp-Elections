@@ -131,7 +131,7 @@ export const postHome = async (req: Request, res: Response) => {
 
         return res.sendStatus(200);
       } else {
-        res.sendStatus(200);
+        return res.sendStatus(200);
       }
     }
   } catch (e) {
