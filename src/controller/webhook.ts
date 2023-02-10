@@ -98,6 +98,7 @@ export const postHome = async (req: Request, res: Response) => {
           await sendInteractiveMessage(
             phoneNumberId,
             from,
+            languageMappings.get("Hindi").title,
             languageMappings.get("Hindi").actionsBody,
             sections,
             "Powered by *RJ*"

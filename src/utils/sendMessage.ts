@@ -77,6 +77,7 @@ export const sendText = async (
 export const sendInteractiveMessage = async (
   phoneNumberId: string,
   from: string,
+  title: string,
   msgBody: string,
   sections: Section[],
   footer: string
@@ -90,7 +91,7 @@ export const sendInteractiveMessage = async (
       type: "list",
       header: {
         type: "text",
-        text: "Actions",
+        text: title,
       },
       body: {
         text: msgBody,
