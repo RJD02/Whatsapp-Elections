@@ -8,7 +8,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm run build && node app.js"
+    "start": "npm run build && node app.js",
+    "build": "tsc -p ."
   },
   "keywords": [],
   "author": "",

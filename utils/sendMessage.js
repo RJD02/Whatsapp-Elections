@@ -74,7 +74,7 @@ const sendText = (phoneNumberId, from, msgBody) => __awaiter(void 0, void 0, voi
     }
 });
 exports.sendText = sendText;
-const sendInteractiveMessage = (phoneNumberId, from, msgBody, sections, footer) => __awaiter(void 0, void 0, void 0, function* () {
+const sendInteractiveMessage = (phoneNumberId, from, title, msgBody, sections, footer) => __awaiter(void 0, void 0, void 0, function* () {
     const axiosData = {
         messaging_product: "whatsapp",
         recipient_type: "individual",
@@ -84,7 +84,7 @@ const sendInteractiveMessage = (phoneNumberId, from, msgBody, sections, footer) 
             type: "list",
             header: {
                 type: "text",
-                text: "Actions",
+                text: title,
             },
             body: {
                 text: msgBody,
