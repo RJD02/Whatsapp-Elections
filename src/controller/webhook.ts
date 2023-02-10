@@ -79,8 +79,7 @@ export const postHome = async (req: Request, res: Response) => {
           await sendText(
             phoneNumberId,
             from,
-            "from here on you will recieve messages in " + language,
-            voter.PreferredLanguage
+            languageMappings.get(language).acknowledgementOfLanguage
           );
         } else if (voter) {
           // voter with this mobile is present
@@ -99,7 +98,7 @@ export const postHome = async (req: Request, res: Response) => {
           await sendInteractiveMessage(
             phoneNumberId,
             from,
-            "Here are your actions",
+            languageMappings.get("Hindi").actionsBody,
             sections,
             "Powered by *RJ*"
           );
@@ -111,14 +110,13 @@ export const postHome = async (req: Request, res: Response) => {
             await sendText(
               phoneNumberId,
               from,
-              "Saved your number, now you can use our services"
+              languageMappings.get("Hindi").acknowledgementOfNumberSave
             );
           } else {
             await sendText(
               phoneNumberId,
               from,
-              "Plese provide your voter id number",
-              languageMappings.get("Hindi")
+              languageMappings.get("Hindi").askForVoterID
             );
           }
         }

@@ -30,18 +30,6 @@ try {
   console.log("Mongo connection error");
 }
 
-exec("node ./node_modules/puppeteer/install.js", (err, stdout, stderr) => {
-  if (err) {
-    console.log(`error: ${err.message}`);
-    return;
-  }
-  if (stderr) {
-    console.log(`stderr: ${stderr}`);
-    return;
-  }
-  console.log(`stdout: ${stdout}`);
-});
-
 app.use(express.json());
 app.use("/webhook", webhooKRouter);
 
