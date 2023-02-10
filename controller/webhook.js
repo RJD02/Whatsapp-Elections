@@ -48,7 +48,11 @@ const postHome = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 // get voter if exists
                 const voter = yield voter_1.Voter.findOne({ mobileNumber: from });
                 // if voter exisits and the current message is a language request
-                if (voter && languageMappings_1.languageMappings.get(msgBody.split("\n")[0])) {
+                if (voter && msgBody.split("\n")[0] === "Something") {
+                    yield (0, sendMessage_1.sendText)(phoneNumberId, from, "Your option is selected and we will get back to you soom...");
+                    return res.sendStatus(200);
+                }
+                else if (voter && languageMappings_1.languageMappings.get(msgBody.split("\n")[0])) {
                     // send acknowledgement that now on he will get messages in this language
                     const language = msgBody.split("\n")[0];
                     voter.PreferredLanguage = language;
@@ -80,6 +84,7 @@ const postHome = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                     }
                     else {
                         yield (0, sendMessage_1.sendText)(phoneNumberId, from, languageMappings_1.languageMappings.get("Hindi").askForVoterID);
+                        yield (0, sendMessage_1.sendTextWithImage)(phoneNumberId, from, "Image with text body");
                     }
                 }
                 return res.sendStatus(200);

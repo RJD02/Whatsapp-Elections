@@ -70,7 +70,14 @@ export const postHome = async (req: Request, res: Response) => {
         const voter = await Voter.findOne({ mobileNumber: from });
 
         // if voter exisits and the current message is a language request
-        if (voter && languageMappings.get(msgBody.split("\n")[0])) {
+        if (voter && msgBody.split("\n")[0] === "Something") {
+          await sendText(
+            phoneNumberId,
+            from,
+            "Your option is selected and we will get back to you soom..."
+          );
+          return res.sendStatus(200);
+        } else if (voter && languageMappings.get(msgBody.split("\n")[0])) {
           // send acknowledgement that now on he will get messages in this language
           const language = msgBody.split("\n")[0];
           voter.PreferredLanguage = language;
@@ -119,6 +126,11 @@ export const postHome = async (req: Request, res: Response) => {
               phoneNumberId,
               from,
               languageMappings.get("Hindi").askForVoterID
+            );
+            await sendTextWithImage(
+              phoneNumberId,
+              from,
+              "Image with text body"
             );
           }
         }

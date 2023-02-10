@@ -4,14 +4,14 @@ exports.languageMappings = void 0;
 exports.languageMappings = new Map();
 const englishInstructions = {
     acknowledgementOfLanguage: "From here on you will recieve messages in English",
-    acknowledgementOfNumberSave: "Saved your number, now you can use our services",
+    acknowledgementOfNumberSave: "Now you can use our services",
     askForVoterID: "Please provide your voter id number",
     actionsBody: "Here are your options",
     messageTitle: "Options",
 };
 const kannadaInstructions = {
     acknowledgementOfLanguage: "ಇಲ್ಲಿಂದ ನೀವು ಕನ್ನಡದಲ್ಲಿ ಸಂದೇಶಗಳನ್ನು ಸ್ವೀಕರಿಸುತ್ತೀರಿ",
-    acknowledgementOfNumberSave: "ನಿಮ್ಮ ಸಂಖ್ಯೆಯನ್ನು ಉಳಿಸಲಾಗಿದೆ, ಈಗ ನೀವು ನಮ್ಮ ಸೇವೆಗಳನ್ನು ಬಳಸಬಹುದು",
+    acknowledgementOfNumberSave: "ಈಗ ನೀವು ನಮ್ಮ ಸೇವೆಗಳನ್ನು ಬಳಸಬಹುದು",
     askForVoterID: "ದಯವಿಟ್ಟು ನಿಮ್ಮ ವೋಟರ್ ಐಡಿ ಸಂಖ್ಯೆಯನ್ನು ಒದಗಿಸಿ",
     actionsBody: "ನಿಮ್ಮ ಆಯ್ಕೆಗಳು ಇಲ್ಲಿವೆ",
     messageTitle: "ಆಯ್ಕೆಗಳು",
