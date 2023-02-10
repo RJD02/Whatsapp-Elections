@@ -120,12 +120,6 @@ export const postHome = async (req: Request, res: Response) => {
               "Plese provide your voter id number",
               languageMappings.get("Hindi")
             );
-            await sendTextWithImage(
-              phoneNumberId,
-              from,
-              "A gift",
-              languageMappings.get("Hindi")
-            );
           }
         }
 
