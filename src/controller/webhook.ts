@@ -102,7 +102,7 @@ export const postHome = async (req: Request, res: Response) => {
             languageMappings.get(language).messageTitle,
             languageMappings.get(language).actionsBody,
             sections,
-            "Powered by *RJ*"
+            "Powered by *RRS*"
           );
         } else if (msgBody) {
           const user = await Voter.findOne({ cardno: msgBody });
