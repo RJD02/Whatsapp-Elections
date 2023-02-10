@@ -9,7 +9,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npm run build && node app.js",
-    "build": "node ./node_modules/puppeteer/install.js && tsc -p ."
+    "build": "tsc -p ."
   },
   "keywords": [],
   "author": "",

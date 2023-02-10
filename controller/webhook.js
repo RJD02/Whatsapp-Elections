@@ -53,7 +53,7 @@ const postHome = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                     const language = msgBody.split("\n")[0];
                     voter.PreferredLanguage = languageMappings_1.languageMappings.get(language);
                     yield voter.save();
-                    yield (0, sendMessage_1.sendText)(phoneNumberId, from, "from here on you will recieve messages in " + language, voter.PreferredLanguage);
+                    yield (0, sendMessage_1.sendText)(phoneNumberId, from, languageMappings_1.languageMappings.get(language).acknowledgementOfLanguage);
                 }
                 else if (voter) {
                     // voter with this mobile is present
@@ -68,18 +68,17 @@ const postHome = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                         ],
                     };
                     const sections = [sampleSection];
-                    yield (0, sendMessage_2.sendInteractiveMessage)(phoneNumberId, from, "Here are your actions", sections, "Powered by *RJ*");
+                    yield (0, sendMessage_2.sendInteractiveMessage)(phoneNumberId, from, languageMappings_1.languageMappings.get("Hindi").actionsBody, sections, "Powered by *RJ*");
                 }
                 else if (msgBody) {
                     const user = yield voter_1.Voter.findOne({ cardno: msgBody });
                     if (user) {
                         user.mobileNumber = from;
                         yield user.save();
-                        yield (0, sendMessage_1.sendText)(phoneNumberId, from, "Saved your number, now you can use our services");
+                        yield (0, sendMessage_1.sendText)(phoneNumberId, from, languageMappings_1.languageMappings.get("Hindi").acknowledgementOfNumberSave);
                     }
                     else {
-                        yield (0, sendMessage_1.sendText)(phoneNumberId, from, "Plese provide your voter id number", languageMappings_1.languageMappings.get("Hindi"));
-                        yield (0, sendMessage_1.sendTextWithImage)(phoneNumberId, from, "A gift", languageMappings_1.languageMappings.get("Hindi"));
+                        yield (0, sendMessage_1.sendText)(phoneNumberId, from, languageMappings_1.languageMappings.get("Hindi").askForVoterID);
                     }
                 }
                 return res.sendStatus(200);

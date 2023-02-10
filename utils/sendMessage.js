@@ -13,8 +13,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendInteractiveMessage = exports.sendText = exports.sendTextWithImage = void 0;
-const translate_1 = require("./translate");
-const languageMappings_1 = require("./languageMappings");
 const axios_1 = __importDefault(require("axios"));
 const getURL = (phoneNumberId) => {
     const url = "https://graph.facebook.com/v15.0/" +
@@ -23,9 +21,8 @@ const getURL = (phoneNumberId) => {
         process.env.WHATSAPP_TOKEN;
     return url;
 };
-const sendTextWithImage = (phoneNumberId, from, msgBody, preferredLanguage = languageMappings_1.languageMappings.get("English")) => __awaiter(void 0, void 0, void 0, function* () {
+const sendTextWithImage = (phoneNumberId, from, msgBody) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const preferredLanguageMsgBody = yield (0, translate_1.translateText)(msgBody, preferredLanguage);
         // object to send
         const axiosData = {
             messaging_product: "whatsapp",
@@ -33,7 +30,7 @@ const sendTextWithImage = (phoneNumberId, from, msgBody, preferredLanguage = lan
             type: "image",
             image: {
                 link: "https://images.unsplash.com/photo-1661961110218-35af7210f803?ixlib=rb-4.0.3&ixid=MnwxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHwxfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
-                caption: "Ack: " + preferredLanguageMsgBody,
+                caption: "Ack: " + msgBody,
             },
             recipient_type: "individual",
         };
@@ -52,15 +49,14 @@ const sendTextWithImage = (phoneNumberId, from, msgBody, preferredLanguage = lan
     }
 });
 exports.sendTextWithImage = sendTextWithImage;
-const sendText = (phoneNumberId, from, msgBody, preferredLanguage = languageMappings_1.languageMappings.get("English")) => __awaiter(void 0, void 0, void 0, function* () {
+const sendText = (phoneNumberId, from, msgBody) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const preferredLanguageMsgBody = yield (0, translate_1.translateText)(msgBody, preferredLanguage);
         // object to send
         const axiosData = {
             messaging_product: "whatsapp",
             to: from,
             type: "text",
-            text: { body: preferredLanguageMsgBody },
+            text: { body: msgBody },
             recipient_type: "individual",
         };
         const resp = yield (0, axios_1.default)({
