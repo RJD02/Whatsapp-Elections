@@ -83,6 +83,7 @@ export const postHome = async (req: Request, res: Response) => {
           );
         } else if (voter) {
           // voter with this mobile is present
+          const language = voter.PreferredLanguage || "Hindi";
           const sampleSection: Section = {
             title: "First row",
             rows: [
@@ -98,8 +99,8 @@ export const postHome = async (req: Request, res: Response) => {
           await sendInteractiveMessage(
             phoneNumberId,
             from,
-            languageMappings.get("Hindi").messageTitle,
-            languageMappings.get("Hindi").actionsBody,
+            languageMappings.get(language).messageTitle,
+            languageMappings.get(language).actionsBody,
             sections,
             "Powered by *RJ*"
           );

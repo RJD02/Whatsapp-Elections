@@ -57,6 +57,7 @@ const postHome = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 }
                 else if (voter) {
                     // voter with this mobile is present
+                    const language = voter.PreferredLanguage || "Hindi";
                     const sampleSection = {
                         title: "First row",
                         rows: [
@@ -68,7 +69,7 @@ const postHome = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                         ],
                     };
                     const sections = [sampleSection];
-                    yield (0, sendMessage_2.sendInteractiveMessage)(phoneNumberId, from, languageMappings_1.languageMappings.get("Hindi").messageTitle, languageMappings_1.languageMappings.get("Hindi").actionsBody, sections, "Powered by *RJ*");
+                    yield (0, sendMessage_2.sendInteractiveMessage)(phoneNumberId, from, languageMappings_1.languageMappings.get(language).messageTitle, languageMappings_1.languageMappings.get(language).actionsBody, sections, "Powered by *RJ*");
                 }
                 else if (msgBody) {
                     const user = yield voter_1.Voter.findOne({ cardno: msgBody });
