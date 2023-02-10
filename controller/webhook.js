@@ -51,7 +51,7 @@ const postHome = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 if (voter && languageMappings_1.languageMappings.get(msgBody.split("\n")[0])) {
                     // send acknowledgement that now on he will get messages in this language
                     const language = msgBody.split("\n")[0];
-                    voter.PreferredLanguage = languageMappings_1.languageMappings.get(language);
+                    voter.PreferredLanguage = language;
                     yield voter.save();
                     yield (0, sendMessage_1.sendText)(phoneNumberId, from, languageMappings_1.languageMappings.get(language).acknowledgementOfLanguage);
                 }

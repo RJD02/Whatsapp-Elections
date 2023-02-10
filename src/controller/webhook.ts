@@ -73,7 +73,7 @@ export const postHome = async (req: Request, res: Response) => {
         if (voter && languageMappings.get(msgBody.split("\n")[0])) {
           // send acknowledgement that now on he will get messages in this language
           const language = msgBody.split("\n")[0];
-          voter.PreferredLanguage = languageMappings.get(language);
+          voter.PreferredLanguage = language;
           await voter.save();
 
           await sendText(
