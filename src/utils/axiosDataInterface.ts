@@ -19,13 +19,11 @@ export interface AxiosTextData extends WhatsappData {
 }
 export type Section = {
   title: string;
-  rows: [
-    {
-      id: string;
-      title: string;
-      description: string;
-    }
-  ];
+  rows: {
+    id: string;
+    title: string;
+    description: string;
+  }[];
 };
 export interface AxiosInteractiveData extends WhatsappData {
   interactive: {

@@ -1,6 +1,7 @@
+import { ContactNumber } from "./../models/number";
 import { Voter } from "./../models/voter";
 import { sendText, sendTextWithImage } from "./../utils/sendMessage";
-import { languageMappings } from "./../utils/languageMappings";
+import { languageMappings, LanguageNames } from "./../utils/languageMappings";
 import { Request, Response } from "express";
 import { Section } from "../utils/axiosDataInterface";
 import { sendInteractiveMessage } from "./../utils/sendMessage";
@@ -48,6 +49,32 @@ interface UserInitiatedMessageBody {
   ];
 }
 
+const searchActions: Section = {
+  title: "Services",
+  rows: [
+    {
+      id: "1",
+      title: "Search",
+      description: "Search by voter id",
+    },
+  ],
+};
+const resetActions: Section = {
+  title: "Reset",
+  rows: [
+    {
+      id: "2",
+      title: "Home",
+      description: "Reset the language",
+    },
+  ],
+};
+
+enum MenuActionTitles {
+  HOME = "Home",
+  SEARCH = "Search",
+}
+
 export const postHome = async (req: Request, res: Response) => {
   console.log("Got /webhook post req");
   const body: UserInitiatedMessageBody = req.body;
@@ -64,78 +91,98 @@ export const postHome = async (req: Request, res: Response) => {
         const phoneNumberId =
           body.entry[0].changes[0].value.metadata.phone_number_id;
         const from = body.entry[0].changes[0].value.messages[0].from;
-        const msgBody = body.entry[0].changes[0].value.messages[0].text.body;
+        let msgBody = body.entry[0].changes[0].value.messages[0].text.body;
+        if (msgBody) {
+          msgBody = msgBody.split("\n")[0];
+        }
 
-        // get voter if exists
-        const voter = await Voter.findOne({ mobileNumber: from });
-
-        // if voter exisits and the current message is a language request
-        if (voter && msgBody.split("\n")[0] === "Something") {
-          await sendText(
-            phoneNumberId,
-            from,
-            "Your option is selected and we will get back to you soom..."
+        // if the number is new and the msg body doesn't contain home
+        // then show the welcome message
+        const mobileNumberUser = await ContactNumber.findOne({
+          mobileNumber: from,
+        });
+        if (msgBody === MenuActionTitles.HOME || !mobileNumberUser) {
+          if (!mobileNumberUser) {
+            const newMobileNumberUser = new ContactNumber({
+              mobileNumber: from,
+              lastConnected: Date.now(),
+              preferredLanguage: "Hindi",
+            });
+            await newMobileNumberUser.save();
+          }
+          const welcomeMessage = "Hello there, welcome";
+          await sendText(phoneNumberId, from, welcomeMessage);
+          const rows: { id: string; title: string; description: string }[] = [];
+          languageMappings.forEach((val, key) =>
+            rows.push({
+              id: key,
+              title: key,
+              description: "Select " + key + " as your default language",
+            })
           );
-          return res.sendStatus(200);
-        } else if (voter && languageMappings.get(msgBody.split("\n")[0])) {
-          // send acknowledgement that now on he will get messages in this language
-          const language = msgBody.split("\n")[0];
-          voter.PreferredLanguage = language;
-          await voter.save();
-
-          await sendText(
-            phoneNumberId,
-            from,
-            languageMappings.get(language).acknowledgementOfLanguage
-          );
-        } else if (voter) {
-          // voter with this mobile is present
-          const language = voter.PreferredLanguage || "Hindi";
-          const sampleSection: Section = {
-            title: "First row",
-            rows: [
-              {
-                title: "Something",
-                description: "Something describing",
-                id: "1234",
-              },
-            ],
+          const languageMenu: Section = {
+            title: "Select your option",
+            rows,
           };
-          const sections = [sampleSection];
-
           await sendInteractiveMessage(
             phoneNumberId,
             from,
-            languageMappings.get(language).messageTitle,
-            languageMappings.get(language).actionsBody,
-            sections,
-            "Powered by *RRS*"
+            "Language Options",
+            "Please select an option",
+            [languageMenu],
+            "Powered by RRS"
           );
-        } else if (msgBody) {
-          const user = await Voter.findOne({ cardno: msgBody });
-          if (user) {
-            user.mobileNumber = from;
-            await user.save();
-            await sendText(
-              phoneNumberId,
-              from,
-              languageMappings.get("Hindi").acknowledgementOfNumberSave
-            );
-          } else {
-            await sendText(
-              phoneNumberId,
-              from,
-              languageMappings.get("Hindi").askForVoterID
-            );
+        } else if (
+          (Object.values(LanguageNames) as string[]).includes(msgBody)
+        ) {
+          // store the preferred language
+          mobileNumberUser.preferredLanguage = msgBody;
+          await mobileNumberUser.save();
+          await sendText(phoneNumberId, from, "Your language has been stored");
+          await sendInteractiveMessage(
+            phoneNumberId,
+            from,
+            "Here are your options",
+            "Pick one to start using the services",
+            [searchActions, resetActions],
+            "Powered by RRS"
+          );
+        } else if (mobileNumberUser && msgBody === MenuActionTitles.SEARCH) {
+          // send a message saying to enter a voter card number
+          await sendText(phoneNumberId, from, "Enter voter id to search");
+        } else if (mobileNumberUser) {
+          // provide for voter search feature
+          const voter = await Voter.findOne({ cardno: msgBody });
+          if (voter) {
+            // voter card number is valid
             await sendTextWithImage(
               phoneNumberId,
               from,
-              "Image with text body"
+              `Here are the details of the voter
+Ward_no: ${voter.Ward_no}
+SLNO: ${voter.SLNO}
+House No.: ${voter.houseno}
+Name: ${voter.VNAME_ENGLISH}
+Card no.: ${voter.cardno}
+Age: ${voter.Age}`
+            );
+          } else {
+            // this is not a valid voter card number
+            await sendText(
+              phoneNumberId,
+              from,
+              "Please try a valid voter id or choose from below actions"
+            );
+            await sendInteractiveMessage(
+              phoneNumberId,
+              from,
+              "Here are your options",
+              "Pick one to start using the services",
+              [searchActions, resetActions],
+              "Powered by RSS"
             );
           }
         }
-
-        return res.sendStatus(200);
       } else {
         return res.sendStatus(200);
       }

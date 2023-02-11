@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postHome = exports.getHome = void 0;
+const number_1 = require("./../models/number");
 const voter_1 = require("./../models/voter");
 const sendMessage_1 = require("./../utils/sendMessage");
 const languageMappings_1 = require("./../utils/languageMappings");
@@ -31,6 +32,31 @@ const getHome = (req, res) => {
     return res.sendStatus(200);
 };
 exports.getHome = getHome;
+const searchActions = {
+    title: "Services",
+    rows: [
+        {
+            id: "1",
+            title: "Search",
+            description: "Search by voter id",
+        },
+    ],
+};
+const resetActions = {
+    title: "Reset",
+    rows: [
+        {
+            id: "2",
+            title: "Home",
+            description: "Reset the language",
+        },
+    ],
+};
+var MenuActionTitles;
+(function (MenuActionTitles) {
+    MenuActionTitles["HOME"] = "Home";
+    MenuActionTitles["SEARCH"] = "Search";
+})(MenuActionTitles || (MenuActionTitles = {}));
 const postHome = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Got /webhook post req");
     const body = req.body;
@@ -44,50 +70,68 @@ const postHome = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 // extract basic information
                 const phoneNumberId = body.entry[0].changes[0].value.metadata.phone_number_id;
                 const from = body.entry[0].changes[0].value.messages[0].from;
-                const msgBody = body.entry[0].changes[0].value.messages[0].text.body;
-                // get voter if exists
-                const voter = yield voter_1.Voter.findOne({ mobileNumber: from });
-                // if voter exisits and the current message is a language request
-                if (voter && msgBody.split("\n")[0] === "Something") {
-                    yield (0, sendMessage_1.sendText)(phoneNumberId, from, "Your option is selected and we will get back to you soom...");
-                    return res.sendStatus(200);
+                let msgBody = body.entry[0].changes[0].value.messages[0].text.body;
+                if (msgBody) {
+                    msgBody = msgBody.split("\n")[0];
                 }
-                else if (voter && languageMappings_1.languageMappings.get(msgBody.split("\n")[0])) {
-                    // send acknowledgement that now on he will get messages in this language
-                    const language = msgBody.split("\n")[0];
-                    voter.PreferredLanguage = language;
-                    yield voter.save();
-                    yield (0, sendMessage_1.sendText)(phoneNumberId, from, languageMappings_1.languageMappings.get(language).acknowledgementOfLanguage);
-                }
-                else if (voter) {
-                    // voter with this mobile is present
-                    const language = voter.PreferredLanguage || "Hindi";
-                    const sampleSection = {
-                        title: "First row",
-                        rows: [
-                            {
-                                title: "Something",
-                                description: "Something describing",
-                                id: "1234",
-                            },
-                        ],
+                // if the number is new and the msg body doesn't contain home
+                // then show the welcome message
+                const mobileNumberUser = yield number_1.ContactNumber.findOne({
+                    mobileNumber: from,
+                });
+                if (msgBody === MenuActionTitles.HOME || !mobileNumberUser) {
+                    if (!mobileNumberUser) {
+                        const newMobileNumberUser = new number_1.ContactNumber({
+                            mobileNumber: from,
+                            lastConnected: Date.now(),
+                            preferredLanguage: "Hindi",
+                        });
+                        yield newMobileNumberUser.save();
+                    }
+                    const welcomeMessage = "Hello there, welcome";
+                    yield (0, sendMessage_1.sendText)(phoneNumberId, from, welcomeMessage);
+                    const rows = [];
+                    languageMappings_1.languageMappings.forEach((val, key) => rows.push({
+                        id: key,
+                        title: key,
+                        description: "Select " + key + " as your default language",
+                    }));
+                    const languageMenu = {
+                        title: "Select your option",
+                        rows,
                     };
-                    const sections = [sampleSection];
-                    yield (0, sendMessage_2.sendInteractiveMessage)(phoneNumberId, from, languageMappings_1.languageMappings.get(language).messageTitle, languageMappings_1.languageMappings.get(language).actionsBody, sections, "Powered by *RRS*");
+                    yield (0, sendMessage_2.sendInteractiveMessage)(phoneNumberId, from, "Language Options", "Please select an option", [languageMenu], "Powered by RRS");
                 }
-                else if (msgBody) {
-                    const user = yield voter_1.Voter.findOne({ cardno: msgBody });
-                    if (user) {
-                        user.mobileNumber = from;
-                        yield user.save();
-                        yield (0, sendMessage_1.sendText)(phoneNumberId, from, languageMappings_1.languageMappings.get("Hindi").acknowledgementOfNumberSave);
+                else if (Object.values(languageMappings_1.LanguageNames).includes(msgBody)) {
+                    // store the preferred language
+                    mobileNumberUser.preferredLanguage = msgBody;
+                    yield mobileNumberUser.save();
+                    yield (0, sendMessage_1.sendText)(phoneNumberId, from, "Your language has been stored");
+                    yield (0, sendMessage_2.sendInteractiveMessage)(phoneNumberId, from, "Here are your options", "Pick one to start using the services", [searchActions, resetActions], "Powered by RRS");
+                }
+                else if (mobileNumberUser && msgBody === MenuActionTitles.SEARCH) {
+                    // send a message saying to enter a voter card number
+                    yield (0, sendMessage_1.sendText)(phoneNumberId, from, "Enter voter id to search");
+                }
+                else if (mobileNumberUser) {
+                    // provide for voter search feature
+                    const voter = yield voter_1.Voter.findOne({ cardno: msgBody });
+                    if (voter) {
+                        // voter card number is valid
+                        yield (0, sendMessage_1.sendTextWithImage)(phoneNumberId, from, `Here are the details of the voter
+Ward_no: ${voter.Ward_no}
+SLNO: ${voter.SLNO}
+House No.: ${voter.houseno}
+Name: ${voter.VNAME_ENGLISH}
+Card no.: ${voter.cardno}
+Age: ${voter.Age}`);
                     }
                     else {
-                        yield (0, sendMessage_1.sendText)(phoneNumberId, from, languageMappings_1.languageMappings.get("Hindi").askForVoterID);
-                        yield (0, sendMessage_1.sendTextWithImage)(phoneNumberId, from, "Image with text body");
+                        // this is not a valid voter card number
+                        yield (0, sendMessage_1.sendText)(phoneNumberId, from, "Please try a valid voter id or choose from below actions");
+                        yield (0, sendMessage_2.sendInteractiveMessage)(phoneNumberId, from, "Here are your options", "Pick one to start using the services", [searchActions, resetActions], "Powered by RSS");
                     }
                 }
-                return res.sendStatus(200);
             }
             else {
                 return res.sendStatus(200);

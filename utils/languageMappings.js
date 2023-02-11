@@ -1,7 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.languageMappings = void 0;
+exports.LanguageNames = exports.languageMappings = void 0;
 exports.languageMappings = new Map();
+var LanguageNames;
+(function (LanguageNames) {
+    LanguageNames["ENGLISH"] = "English";
+    LanguageNames["HINDI"] = "Hindi";
+    LanguageNames["KANNADA"] = "Kannada";
+})(LanguageNames = exports.LanguageNames || (exports.LanguageNames = {}));
 const englishInstructions = {
     acknowledgementOfLanguage: "From here on you will recieve messages in English",
     acknowledgementOfNumberSave: "Now you can use our services",
@@ -23,9 +29,9 @@ const hindiInstruction = {
     actionsBody: "यहाँ आपके विकल्प हैं",
     messageTitle: "विकल्प",
 };
-exports.languageMappings.set("English", englishInstructions);
-exports.languageMappings.set("Kannada", kannadaInstructions);
-exports.languageMappings.set("Hindi", hindiInstruction);
+exports.languageMappings.set(LanguageNames.ENGLISH, englishInstructions);
+exports.languageMappings.set(LanguageNames.KANNADA, kannadaInstructions);
+exports.languageMappings.set(LanguageNames.HINDI, hindiInstruction);
 // languageMappings.set("Marathi", "mr");
 // languageMappings.set("Telugu", "te");
 // languageMappings.set("Urdu", "ur");

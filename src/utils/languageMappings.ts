@@ -1,6 +1,12 @@
 export const languageMappings = new Map();
 
-type Language = {
+export enum LanguageNames {
+  ENGLISH = "English",
+  HINDI = "Hindi",
+  KANNADA = "Kannada",
+}
+
+type LanguageContent = {
   acknowledgementOfLanguage: string;
   acknowledgementOfNumberSave: string;
   askForVoterID: string;
@@ -8,7 +14,7 @@ type Language = {
   messageTitle: string;
 };
 
-const englishInstructions: Language = {
+const englishInstructions: LanguageContent = {
   acknowledgementOfLanguage:
     "From here on you will recieve messages in English",
   acknowledgementOfNumberSave: "Now you can use our services",
@@ -17,7 +23,7 @@ const englishInstructions: Language = {
   messageTitle: "Options",
 };
 
-const kannadaInstructions: Language = {
+const kannadaInstructions: LanguageContent = {
   acknowledgementOfLanguage:
     "ಇಲ್ಲಿಂದ ನೀವು ಕನ್ನಡದಲ್ಲಿ ಸಂದೇಶಗಳನ್ನು ಸ್ವೀಕರಿಸುತ್ತೀರಿ",
   acknowledgementOfNumberSave: "ಈಗ ನೀವು ನಮ್ಮ ಸೇವೆಗಳನ್ನು ಬಳಸಬಹುದು",
@@ -26,7 +32,7 @@ const kannadaInstructions: Language = {
   messageTitle: "ಆಯ್ಕೆಗಳು",
 };
 
-const hindiInstruction: Language = {
+const hindiInstruction: LanguageContent = {
   acknowledgementOfLanguage: "यहां से आपको हिंदी में संदेश प्राप्त होंगे",
   acknowledgementOfNumberSave:
     "आपका नंबर सेव कर लिया है, अब आप हमारी सेवाओं का उपयोग कर सकते हैं",
@@ -35,9 +41,9 @@ const hindiInstruction: Language = {
   messageTitle: "विकल्प",
 };
 
-languageMappings.set("English", englishInstructions);
-languageMappings.set("Kannada", kannadaInstructions);
-languageMappings.set("Hindi", hindiInstruction);
+languageMappings.set(LanguageNames.ENGLISH, englishInstructions);
+languageMappings.set(LanguageNames.KANNADA, kannadaInstructions);
+languageMappings.set(LanguageNames.HINDI, hindiInstruction);
 // languageMappings.set("Marathi", "mr");
 // languageMappings.set("Telugu", "te");
 // languageMappings.set("Urdu", "ur");
