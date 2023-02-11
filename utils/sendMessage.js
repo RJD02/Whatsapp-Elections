@@ -66,7 +66,7 @@ const sendText = (phoneNumberId, from, msgBody) => __awaiter(void 0, void 0, voi
             headers: { "Content-Type": "application/json" },
         });
         const data = yield resp.data;
-        console.log(data);
+        // console.log(data);
     }
     catch (e) {
         console.log("Error while sending text");
@@ -105,7 +105,7 @@ const sendInteractiveMessage = (phoneNumberId, from, title, msgBody, sections, f
             data: axiosData,
         });
         const data = yield resp.data;
-        console.log(data);
+        // console.log(data);
     }
     catch (e) {
         console.log("Error while sending interactive message");

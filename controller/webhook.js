@@ -76,6 +76,7 @@ const postHome = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 if (msgBody) {
                     msgBody = msgBody.split("\n")[0];
                 }
+                console.log("Message body", JSON.stringify(msgBody));
                 // if the number is new and the msg body doesn't contain home
                 // then show the welcome message
                 const mobileNumberUser = yield number_1.ContactNumber.findOne({

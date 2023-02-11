@@ -67,7 +67,7 @@ export const sendText = async (
       headers: { "Content-Type": "application/json" },
     });
     const data = await resp.data;
-    console.log(data);
+    // console.log(data);
   } catch (e: any) {
     console.log("Error while sending text");
     console.log(e.response);
@@ -112,7 +112,7 @@ export const sendInteractiveMessage = async (
       data: axiosData,
     });
     const data = await resp.data;
-    console.log(data);
+    // console.log(data);
   } catch (e: any) {
     console.log("Error while sending interactive message");
     console.log(e.any);
