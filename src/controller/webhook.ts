@@ -97,7 +97,7 @@ export const postHome = async (req: Request, res: Response) => {
         if (msgBody) {
           msgBody = msgBody.split("\n")[0];
         }
-        console.log("Message body", JSON.stringify(msgBody));
+        console.log("Message body", JSON.stringify({ msgBody }));
         // if the number is new and the msg body doesn't contain home
         // then show the welcome message
         const mobileNumberUser = await ContactNumber.findOne({
