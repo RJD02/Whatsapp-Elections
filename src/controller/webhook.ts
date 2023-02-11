@@ -189,6 +189,7 @@ Age: ${voter.Age}`
     }
   } catch (e) {
     console.log("Error responding in webhook post");
+    console.log(e);
   }
   res.sendStatus(200);
 };
