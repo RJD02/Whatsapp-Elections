@@ -34,8 +34,15 @@ interface UserInitiatedMessageBody {
             messages: [
               {
                 from: string;
-                text: {
+                text?: {
                   body: string;
+                };
+                type?: "interactive" | "text";
+                interactive?: {
+                  type: "list_reply";
+                  list_reply: {
+                    title: string;
+                  };
                 };
               }
             ];
@@ -85,34 +92,27 @@ export const postHome = async (req: Request, res: Response) => {
         body.entry[0].changes &&
         body.entry[0].changes[0] &&
         body.entry[0].changes[0].value.messages &&
-        body.entry[0].changes[0].value.messages[0]
+        body.entry[0].changes[0].value.messages[0].type === "text"
       ) {
         // extract basic information
         const phoneNumberId =
           body.entry[0].changes[0].value.metadata.phone_number_id;
         const from = body.entry[0].changes[0].value.messages[0].from;
-        let msgBody = "";
-        if (body.entry[0].changes[0].value.messages[0].text)
-          msgBody = body.entry[0].changes[0].value.messages[0].text.body;
-        if (msgBody) {
-          msgBody = msgBody.split("\n")[0];
-        }
-        console.log("Message body", JSON.stringify({ msgBody }));
-        console.log(JSON.stringify(req.body));
+        let msgBody = body.entry[0].changes[0].value.messages[0].text;
+
         // if the number is new and the msg body doesn't contain home
         // then show the welcome message
         const mobileNumberUser = await ContactNumber.findOne({
           mobileNumber: from,
         });
-        if (msgBody === MenuActionTitles.HOME || !mobileNumberUser) {
-          if (!mobileNumberUser) {
-            const newMobileNumberUser = new ContactNumber({
-              mobileNumber: from,
-              lastConnected: Date.now(),
-              preferredLanguage: "Hindi",
-            });
-            await newMobileNumberUser.save();
-          }
+        if (!mobileNumberUser) {
+          const newMobileNumberUser = new ContactNumber({
+            mobileNumber: from,
+            lastConnected: Date.now(),
+            preferredLanguage: "Hindi",
+          });
+          await newMobileNumberUser.save();
+
           const welcomeMessage = "Hello there, welcome";
           await sendText(phoneNumberId, from, welcomeMessage);
           const rows: { id: string; title: string; description: string }[] = [];
@@ -135,24 +135,6 @@ export const postHome = async (req: Request, res: Response) => {
             [languageMenu],
             "Powered by RRS"
           );
-        } else if (
-          (Object.values(LanguageNames) as string[]).includes(msgBody)
-        ) {
-          // store the preferred language
-          mobileNumberUser.preferredLanguage = msgBody;
-          await mobileNumberUser.save();
-          await sendText(phoneNumberId, from, "Your language has been stored");
-          await sendInteractiveMessage(
-            phoneNumberId,
-            from,
-            "Here are your options",
-            "Pick one to start using the services",
-            [searchActions, resetActions],
-            "Powered by RRS"
-          );
-        } else if (mobileNumberUser && msgBody === MenuActionTitles.SEARCH) {
-          // send a message saying to enter a voter card number
-          await sendText(phoneNumberId, from, "Enter voter id to search");
         } else if (mobileNumberUser) {
           // provide for voter search feature
           const voter = await Voter.findOne({ cardno: msgBody });
@@ -186,8 +168,76 @@ Age: ${voter.Age}`
             );
           }
         }
-      } else {
-        return res.sendStatus(200);
+      } else if (
+        body.entry &&
+        body.entry[0].changes &&
+        body.entry[0].changes[0] &&
+        body.entry[0].changes[0].value.messages &&
+        body.entry[0].changes[0].value.messages[0] &&
+        body.entry[0].changes[0].value.messages[0].type === "interactive"
+      ) {
+        const phoneNumberId =
+          body.entry[0].changes[0].value.metadata.phone_number_id;
+        const from = body.entry[0].changes[0].value.messages[0].from;
+        const title =
+          body.entry[0].changes[0].value.messages[0].interactive?.list_reply
+            .title;
+        const mobileNumberUser = await ContactNumber.findOne({
+          mobileNumber: from,
+        });
+        //check home
+        if ((title && title === MenuActionTitles.HOME) || !mobileNumberUser) {
+          if (!mobileNumberUser) {
+            const newMobileNumberUser = new ContactNumber({
+              mobileNumber: from,
+              lastConnected: Date.now(),
+              preferredLanguage: "Hindi",
+            });
+            await newMobileNumberUser.save();
+          }
+          const welcomeMessage = "Hello there, welcome";
+          await sendText(phoneNumberId, from, welcomeMessage);
+          const rows: { id: string; title: string; description: string }[] = [];
+          languageMappings.forEach((val, key) =>
+            rows.push({
+              id: key,
+              title: key,
+              description: `Select ${key} as your default language`,
+            })
+          );
+          const languageMenu: Section = {
+            title: "Select your option",
+            rows,
+          };
+          await sendInteractiveMessage(
+            phoneNumberId,
+            from,
+            "Lanuage Option",
+            "Please select an option",
+            [languageMenu],
+            "Powered by RRS"
+          );
+        } else if (
+          title &&
+          (Object.values(LanguageNames) as string[]).includes(title)
+        ) {
+          // check language
+          mobileNumberUser.preferredLanguage = title;
+          await mobileNumberUser.save();
+          await sendText(phoneNumberId, from, "Your language has been stored");
+          await sendInteractiveMessage(
+            phoneNumberId,
+            from,
+            "Here are your option",
+            "Pick one to start using our services",
+            [searchActions, resetActions],
+            "Powered by RRS"
+          );
+        } else if (title && title === MenuActionTitles.SEARCH) {
+          // check search
+          await sendText(phoneNumberId, from, "Enter voter id to search");
+        } else if (mobileNumberUser) {
+        }
       }
     }
   } catch (e) {
