@@ -98,7 +98,7 @@ export const postHome = async (req: Request, res: Response) => {
         const phoneNumberId =
           body.entry[0].changes[0].value.metadata.phone_number_id;
         const from = body.entry[0].changes[0].value.messages[0].from;
-        let msgBody = body.entry[0].changes[0].value.messages[0].text;
+        let msgBody = body.entry[0].changes[0].value.messages[0].text?.body;
 
         // if the number is new and the msg body doesn't contain home
         // then show the welcome message
@@ -236,7 +236,6 @@ Age: ${voter.Age}`
         } else if (title && title === MenuActionTitles.SEARCH) {
           // check search
           await sendText(phoneNumberId, from, "Enter voter id to search");
-        } else if (mobileNumberUser) {
         }
       }
     }

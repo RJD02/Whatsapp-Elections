@@ -58,7 +58,7 @@ var MenuActionTitles;
     MenuActionTitles["SEARCH"] = "Search";
 })(MenuActionTitles || (MenuActionTitles = {}));
 const postHome = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
+    var _a, _b;
     console.log("Got /webhook post req");
     const body = req.body;
     try {
@@ -71,7 +71,7 @@ const postHome = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 // extract basic information
                 const phoneNumberId = body.entry[0].changes[0].value.metadata.phone_number_id;
                 const from = body.entry[0].changes[0].value.messages[0].from;
-                let msgBody = body.entry[0].changes[0].value.messages[0].text;
+                let msgBody = (_a = body.entry[0].changes[0].value.messages[0].text) === null || _a === void 0 ? void 0 : _a.body;
                 // if the number is new and the msg body doesn't contain home
                 // then show the welcome message
                 const mobileNumberUser = yield number_1.ContactNumber.findOne({
@@ -126,7 +126,7 @@ Age: ${voter.Age}`);
                 body.entry[0].changes[0].value.messages[0].type === "interactive") {
                 const phoneNumberId = body.entry[0].changes[0].value.metadata.phone_number_id;
                 const from = body.entry[0].changes[0].value.messages[0].from;
-                const title = (_a = body.entry[0].changes[0].value.messages[0].interactive) === null || _a === void 0 ? void 0 : _a.list_reply.title;
+                const title = (_b = body.entry[0].changes[0].value.messages[0].interactive) === null || _b === void 0 ? void 0 : _b.list_reply.title;
                 const mobileNumberUser = yield number_1.ContactNumber.findOne({
                     mobileNumber: from,
                 });
@@ -165,8 +165,6 @@ Age: ${voter.Age}`);
                 else if (title && title === MenuActionTitles.SEARCH) {
                     // check search
                     yield (0, sendMessage_1.sendText)(phoneNumberId, from, "Enter voter id to search");
-                }
-                else if (mobileNumberUser) {
                 }
             }
         }
