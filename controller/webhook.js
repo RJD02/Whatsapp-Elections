@@ -58,7 +58,7 @@ var MenuActionTitles;
     MenuActionTitles["SEARCH"] = "Search";
 })(MenuActionTitles || (MenuActionTitles = {}));
 const postHome = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b;
+    var _a;
     console.log("Got /webhook post req");
     const body = req.body;
     try {
@@ -67,11 +67,12 @@ const postHome = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 body.entry[0].changes &&
                 body.entry[0].changes[0] &&
                 body.entry[0].changes[0].value.messages &&
-                body.entry[0].changes[0].value.messages[0].type === "text") {
+                body.entry[0].changes[0].value.messages[0].type === "text" &&
+                body.entry[0].changes[0].value.messages[0].text) {
                 // extract basic information
                 const phoneNumberId = body.entry[0].changes[0].value.metadata.phone_number_id;
                 const from = body.entry[0].changes[0].value.messages[0].from;
-                let msgBody = (_a = body.entry[0].changes[0].value.messages[0].text) === null || _a === void 0 ? void 0 : _a.body;
+                const msgBody = body.entry[0].changes[0].value.messages[0].text.body;
                 // if the number is new and the msg body doesn't contain home
                 // then show the welcome message
                 const mobileNumberUser = yield number_1.ContactNumber.findOne({
@@ -126,7 +127,7 @@ Age: ${voter.Age}`);
                 body.entry[0].changes[0].value.messages[0].type === "interactive") {
                 const phoneNumberId = body.entry[0].changes[0].value.metadata.phone_number_id;
                 const from = body.entry[0].changes[0].value.messages[0].from;
-                const title = (_b = body.entry[0].changes[0].value.messages[0].interactive) === null || _b === void 0 ? void 0 : _b.list_reply.title;
+                const title = (_a = body.entry[0].changes[0].value.messages[0].interactive) === null || _a === void 0 ? void 0 : _a.list_reply.title;
                 const mobileNumberUser = yield number_1.ContactNumber.findOne({
                     mobileNumber: from,
                 });
