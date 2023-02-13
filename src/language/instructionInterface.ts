@@ -22,6 +22,7 @@ export interface Instruction {
     age: string
   ) => string;
   wrongVoterIdMessage: string;
+  searchPromptMessage: string;
   interactiveMessage: {
     header: string;
     body: string;

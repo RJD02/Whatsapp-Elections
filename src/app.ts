@@ -3,7 +3,8 @@ import dotenv from "dotenv";
 dotenv.config();
 import express, { Request, Response } from "express";
 import mongoose from "mongoose";
-import { router as webhooKRouter } from "./routes/webhookRoutes";
+import { router as webhooKRouter } from "./routes/webhook/webhookRoutes";
+import { router as apiRouter } from "./routes/api/apiRoutes";
 const app = express();
 
 const PORT = process.env.PORT || 3000;
@@ -32,6 +33,7 @@ try {
 
 app.use(express.json());
 app.use("/webhook", webhooKRouter);
+app.use("/api", apiRouter);
 
 app.get("/", (req: Request, res: Response): void => {
   console.log("Got original home");

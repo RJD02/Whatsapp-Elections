@@ -42,6 +42,7 @@ Age: ${age}`;
   Search: "Search",
   language: "English",
   languageCode: "en",
+  searchPromptMessage: "Please enter a voter id",
   wrongVoterIdMessage:
     "Please try a valid voter id or choose from the below actions",
   languageSelectionMessage: "Your language preference has been stored",

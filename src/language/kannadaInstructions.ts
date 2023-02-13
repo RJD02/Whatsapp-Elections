@@ -43,6 +43,7 @@ Age: ${age}`;
   Search: "ಹುಡುಕಿ",
   language: "Kannada",
   languageCode: "kn",
+  searchPromptMessage: "ದಯವಿಟ್ಟು ವೋಟರ್ ಐಡಿಯನ್ನು ನಮೂದಿಸಿ",
   wrongVoterIdMessage:
     "ದಯವಿಟ್ಟು ಮಾನ್ಯವಾದ ವೋಟರ್ ಐಡಿಯನ್ನು ಪ್ರಯತ್ನಿಸಿ ಅಥವಾ ಕೆಳಗಿನ ಕ್ರಿಯೆಗಳಿಂದ ಆಯ್ಕೆಮಾಡಿ",
   languageSelectionMessage: "ನಿಮ್ಮ ಭಾಷೆಯ ಆದ್ಯತೆಯನ್ನು ಸಂಗ್ರಹಿಸಲಾಗಿದೆ",

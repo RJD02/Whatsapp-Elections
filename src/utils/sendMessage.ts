@@ -115,6 +115,6 @@ export const sendInteractiveMessage = async (
     // console.log(data);
   } catch (e: any) {
     console.log("Error while sending interactive message");
-    console.log(e.any);
+    console.log(e.response.data);
   }
 };
