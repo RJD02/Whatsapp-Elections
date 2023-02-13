@@ -7,7 +7,8 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
-const webhookRoutes_1 = require("./routes/webhookRoutes");
+const webhookRoutes_1 = require("./routes/webhook/webhookRoutes");
+const apiRoutes_1 = require("./routes/api/apiRoutes");
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 3000;
 // mongoose.connect(
@@ -30,6 +31,7 @@ catch (e) {
 }
 app.use(express_1.default.json());
 app.use("/webhook", webhookRoutes_1.router);
+app.use("/api", apiRoutes_1.router);
 app.get("/", (req, res) => {
     console.log("Got original home");
     res.sendStatus(200);

@@ -109,7 +109,7 @@ const sendInteractiveMessage = (phoneNumberId, from, title, msgBody, sections, f
     }
     catch (e) {
         console.log("Error while sending interactive message");
-        console.log(e.any);
+        console.log(e.response.data);
     }
 });
 exports.sendInteractiveMessage = sendInteractiveMessage;
