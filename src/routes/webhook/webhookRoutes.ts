@@ -8,4 +8,5 @@ router.get("/", getHome);
 
 router.post("/", postHome);
 
+router.get("/contestant/:id", getHome);
 router.post("/contestant/:id", contestantMiddleware, postHome);
