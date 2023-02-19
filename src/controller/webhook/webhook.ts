@@ -1,3 +1,5 @@
+import { Document } from "mongoose";
+import { Contestant, ContestantInterface } from "./../../models/contestant";
 import {
   kannadaTextMsgHandler,
   kannadaInteractiveMsgHandler,
@@ -7,7 +9,7 @@ import { ContactNumber } from "../../models/number";
 import { Voter } from "../../models/voter";
 import { sendText, sendTextWithImage } from "../../utils/sendMessage";
 import { languageMappings, LanguageNames } from "../../utils/languageMappings";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { Section } from "../../utils/axiosDataInterface";
 import { sendInteractiveMessage } from "../../utils/sendMessage";
 import {
@@ -66,6 +68,56 @@ interface UserInitiatedMessageBody {
   ];
 }
 
+const getFrom = (req: Request) => {
+  const body: UserInitiatedMessageBody = req.body;
+  if (
+    body.entry &&
+    body.entry[0].changes &&
+    body.entry[0].changes[0] &&
+    body.entry[0].changes[0].value.messages &&
+    body.entry[0].changes[0].value.messages[0].type === "text" &&
+    body.entry[0].changes[0].value.messages[0].text
+  ) {
+    return body.entry[0].changes[0].value.messages[0].from;
+  } else if (
+    body.entry &&
+    body.entry[0].changes &&
+    body.entry[0].changes[0] &&
+    body.entry[0].changes[0].value.messages &&
+    body.entry[0].changes[0].value.messages[0] &&
+    body.entry[0].changes[0].value.messages[0].type === "interactive"
+  ) {
+    return body.entry[0].changes[0].value.messages[0].from;
+  }
+};
+
+export const contestantMiddleware = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  console.log("inside contestant middle ware");
+  const contestant = await Contestant.findById(req.params.id);
+  const from = getFrom(req);
+  const user = await ContactNumber.findOne({ mobileNumber: from });
+  if (user && contestant) {
+    if (!contestant.isSubscribed) {
+      return res.sendStatus(200);
+    }
+    const yesterday = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
+    if (yesterday < user.lastConnected) {
+      contestant.conversationNumber += 1;
+    } else {
+      user.lastConnected = new Date();
+    }
+    await contestant.save();
+    next();
+  } else if (contestant) {
+    contestant.conversationNumber += 1;
+    await contestant.save();
+    next();
+  }
+};
 export const postHome = async (req: Request, res: Response) => {
   console.log("Got /webhook post req");
   const body: UserInitiatedMessageBody = req.body;
@@ -99,6 +151,11 @@ export const postHome = async (req: Request, res: Response) => {
           await newMobileNumberUser.save();
           mobileNumberUser = newMobileNumberUser;
         }
+        const contestant = await Contestant.findById(req.params.id);
+        if (contestant) {
+          contestant.voterIdSearchNumber += 1;
+          await contestant.save();
+        }
         switch (mobileNumberUser.preferredLanguage) {
           case englishInstructions.language:
             englishTextMsgHandler(phoneNumberId, from, msgBody).then(() =>
@@ -109,62 +166,6 @@ export const postHome = async (req: Request, res: Response) => {
             await kannadaTextMsgHandler(phoneNumberId, from, msgBody);
             break;
         }
-
-        //           const welcomeMessage = "Hello there, welcome";
-        //           await sendText(phoneNumberId, from, welcomeMessage);
-        //           const rows: { id: string; title: string; description: string }[] = [];
-        //           languageMappings.forEach((val, key) =>
-        //             rows.push({
-        //               id: key,
-        //               title: key,
-        //               description: "Select " + key + " as your default language",
-        //             })
-        //           );
-        //           const languageMenu: Section = {
-        //             title: "Select your option",
-        //             rows,
-        //           };
-        //           await sendInteractiveMessage(
-        //             phoneNumberId,
-        //             from,
-        //             "Language Options",
-        //             "Please select an option",
-        //             [languageMenu],
-        //             "Powered by RRS"
-        //           );
-        //         } else if (mobileNumberUser) {
-        //           // provide for voter search feature
-        //           const voter = await Voter.findOne({ cardno: msgBody });
-        //           if (voter) {
-        //             // voter card number is valid
-        //             await sendTextWithImage(
-        //               phoneNumberId,
-        //               from,
-        //               `Here are the details of the voter
-        // Ward_no: ${voter.Ward_no}
-        // SLNO: ${voter.SLNO}
-        // House No.: ${voter.houseno}
-        // Name: ${voter.VNAME_ENGLISH}
-        // Card no.: ${voter.cardno}
-        // Age: ${voter.Age}`
-        //             );
-        //           } else {
-        //             // this is not a valid voter card number
-        //             await sendText(
-        //               phoneNumberId,
-        //               from,
-        //               "Please try a valid voter id or choose from below actions"
-        //             );
-        //             await sendInteractiveMessage(
-        //               phoneNumberId,
-        //               from,
-        //               "Here are your options",
-        //               "Pick one to start using the services",
-        //               [searchActions, resetActions],
-        //               "Powered by RSS"
-        //             );
-        //           }
-        // }
       } else if (
         body.entry &&
         body.entry[0].changes &&
@@ -202,58 +203,6 @@ export const postHome = async (req: Request, res: Response) => {
             await kannadaInteractiveMsgHandler(phoneNumberId, from, title);
             break;
         }
-        //check home
-        // if ((title && title === MenuActionTitles.HOME) || !mobileNumberUser) {
-        //   if (!mobileNumberUser) {
-        //     const newMobileNumberUser = new ContactNumber({
-        //       mobileNumber: from,
-        //       lastConnected: Date.now(),
-        //       preferredLanguage: "Hindi",
-        //     });
-        //     await newMobileNumberUser.save();
-        //   }
-        //   const welcomeMessage = "Hello there, welcome";
-        //   await sendText(phoneNumberId, from, welcomeMessage);
-        //   const rows: { id: string; title: string; description: string }[] = [];
-        //   languageMappings.forEach((val, key) =>
-        //     rows.push({
-        //       id: key,
-        //       title: key,
-        //       description: `Select ${key} as your default language`,
-        //     })
-        //   );
-        //   const languageMenu: Section = {
-        //     title: "Select your option",
-        //     rows,
-        //   };
-        //   await sendInteractiveMessage(
-        //     phoneNumberId,
-        //     from,
-        //     "Lanuage Option",
-        //     "Please select an option",
-        //     [languageMenu],
-        //     "Powered by RRS"
-        //   );
-        // } else if (
-        //   title &&
-        //   (Object.values(LanguageNames) as string[]).includes(title)
-        // ) {
-        //   // check language
-        //   mobileNumberUser.preferredLanguage = title;
-        //   await mobileNumberUser.save();
-        //   await sendText(phoneNumberId, from, "Your language has been stored");
-        //   await sendInteractiveMessage(
-        //     phoneNumberId,
-        //     from,
-        //     "Here are your option",
-        //     "Pick one to start using our services",
-        //     [searchActions, resetActions],
-        //     "Powered by RRS"
-        //   );
-        // } else if (title && title === MenuActionTitles.SEARCH) {
-        //   // check search
-        //   await sendText(phoneNumberId, from, "Enter voter id to search");
-        // }
       }
     }
   } catch (e) {

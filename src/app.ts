@@ -1,3 +1,5 @@
+import { func } from "./test/test";
+import { Contestant } from "./models/contestant";
 import { exec } from "child_process";
 import dotenv from "dotenv";
 dotenv.config();
@@ -5,6 +7,7 @@ import express, { Request, Response } from "express";
 import mongoose from "mongoose";
 import { router as webhooKRouter } from "./routes/webhook/webhookRoutes";
 import { router as apiRouter } from "./routes/api/apiRoutes";
+
 const app = express();
 
 const PORT = process.env.PORT || 3000;
@@ -39,6 +42,8 @@ app.get("/", (req: Request, res: Response): void => {
   console.log("Got original home");
   res.sendStatus(200);
 });
+
+// func();
 
 app.listen(PORT, (): void => {
   console.log("Listening on port", PORT);

@@ -1,8 +1,13 @@
-import { getContestants, addContestant } from "./../../controller/api/api";
-import express, { Request, Response } from "express";
+import {
+  getContestants,
+  subscribe,
+  unSubscribe,
+} from "./../../controller/api/api.controller";
+
+import express from "express";
 
 export const router = express.Router();
 
-router.get("/contestants", getContestants);
-
-router.post("/contestants", addContestant);
+router.get("/contestant", getContestants);
+router.post("/contestant/:id/subscribe", subscribe);
+router.post("/contestant/:id/unsubscribe", unSubscribe);
