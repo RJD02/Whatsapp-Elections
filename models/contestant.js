@@ -7,8 +7,19 @@ exports.Contestant = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const contestantSchema = new mongoose_1.default.Schema({
     mobileNumber: String,
-    conversationNumber: Number,
-    isSubscribed: Boolean,
+    conversationNumber: {
+        type: Number,
+        required: true,
+    },
+    isSubscribed: {
+        type: Boolean,
+        default: true,
+        required: true,
+    },
+    voterIdSearchNumber: {
+        type: Number,
+        required: true,
+    },
     webhookURL: String,
     region: String,
 });

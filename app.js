@@ -36,6 +36,7 @@ app.get("/", (req, res) => {
     console.log("Got original home");
     res.sendStatus(200);
 });
+// func();
 app.listen(PORT, () => {
     console.log("Listening on port", PORT);
 });
