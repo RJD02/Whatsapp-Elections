@@ -64,15 +64,12 @@ const contestantMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 
         const yesterday = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
         if (yesterday > user.lastConnected) {
             contestant.conversationNumber += 1;
+            console.log("It's not been 24 hours yet");
         }
         else {
             user.lastConnected = new Date();
+            console.log("It's been over 24 hours");
         }
-        yield contestant.save();
-        next();
-    }
-    else if (contestant) {
-        contestant.conversationNumber += 1;
         yield contestant.save();
         next();
     }
