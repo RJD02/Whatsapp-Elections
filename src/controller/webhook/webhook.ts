@@ -105,7 +105,7 @@ export const contestantMiddleware = async (
       return res.sendStatus(200);
     }
     const yesterday = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
-    if (yesterday < user.lastConnected) {
+    if (yesterday > user.lastConnected) {
       contestant.conversationNumber += 1;
     } else {
       user.lastConnected = new Date();
